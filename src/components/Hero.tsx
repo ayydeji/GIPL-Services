@@ -1,135 +1,67 @@
-import { siteConfig } from "@/lib/site-config";
-import Image from "next/image";
+import { EPC_BOOKING_URL, siteConfig } from "@/lib/site-config";
+import FloorPlanClient from "@/components/FloorPlanClient";
 
 export function Hero() {
   return (
-    <section
-      id="home"
-      className="relative overflow-hidden bg-espresso-900 pt-32 pb-20 sm:pt-40 sm:pb-28"
-    >
-      {/* Ambient background texture */}
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute inset-0 opacity-[0.07]"
-        style={{
-          backgroundImage:
-            "radial-gradient(circle at 1px 1px, #FAF8F5 1px, transparent 0)",
-          backgroundSize: "28px 28px",
-        }}
-      />
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -top-24 right-[-10%] h-[32rem] w-[32rem] rounded-full bg-bronze-500/20 blur-3xl"
-      />
-
-      <div className="relative mx-auto grid max-w-7xl gap-16 px-5 sm:px-8 lg:grid-cols-[1.05fr_1fr] lg:items-center lg:gap-12">
-        {/* Copy column */}
-        <div>
-          <span className="inline-flex items-center gap-2 rounded-full border border-tan-400/30 bg-paper/5 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.14em] text-tan-300">
-            London &amp; Kent · Property Marketing Specialists
-          </span>
-
-          <h1 className="mt-6 max-w-xl font-display text-4xl font-semibold leading-[1.08] text-paper text-balance sm:text-5xl lg:text-[3.4rem]">
-            Make every listing the one buyers stop scrolling for.
-          </h1>
-
-          <p className="mt-6 max-w-lg text-lg leading-relaxed text-sand-200/85">
-            {siteConfig.companyLegalName} ({siteConfig.brandName}) delivers
-            3D virtual tours, EPC certificates, and property photography for
-            landlords, estate agents, and property professionals.
-          </p>
-
-          <div className="mt-9 flex flex-wrap items-center gap-4">
-            <a
-              href="#quote"
-              className="rounded-full bg-tan-400 px-7 py-3.5 text-sm font-semibold text-espresso-900 shadow-card transition-all hover:bg-tan-300 hover:shadow-card-hover"
+    <>
+      {/* ── Full-viewport hero ─────────────────────────────────────── */}
+      <section
+        id="home"
+        className="bg-paper flex flex-col"
+        style={{ height: "100dvh", minHeight: "560px" }}
+      >
+        {/* Headline + CTA */}
+        <div className="mx-auto w-full max-w-[1400px] px-5 pt-14 sm:px-8 sm:pt-16 shrink-0">
+          <div className="flex flex-col gap-7 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
+            <h1
+              className="max-w-[28ch] font-medium tracking-[-0.02em] leading-[1.1] text-espresso-900 text-balance"
+              style={{ fontSize: "clamp(1.6rem, 3.2vw, 3.5rem)" }}
             >
-              Get a Quote
-            </a>
+              Your property, fully covered by{" "}
+              <span className="text-bronze-500">GIPL Services.</span> EPC,
+              virtual tours and photography in{" "}
+              <span className="text-bronze-500">one visit.</span>
+            </h1>
+
             <a
-              href="#prices"
-              className="rounded-full border border-paper/25 px-7 py-3.5 text-sm font-semibold text-paper transition-colors hover:border-paper/50 hover:bg-paper/5"
+              href={EPC_BOOKING_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-espresso-900 px-7 py-3.5 text-sm font-semibold text-paper transition-colors hover:bg-bronze-600 sm:mt-2"
             >
-              View Prices
+              Book an EPC
+              <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+                <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
             </a>
           </div>
-
-          <dl className="mt-12 grid max-w-md grid-cols-3 gap-6 border-t border-paper/10 pt-8">
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-sand-200/60">
-                Services
-              </dt>
-              <dd className="mt-1 font-display text-xl text-paper">3-in-1</dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-sand-200/60">
-                Coverage
-              </dt>
-              <dd className="mt-1 font-display text-xl text-paper">
-                London &amp; Kent
-              </dd>
-            </div>
-            <div>
-              <dt className="text-xs uppercase tracking-wide text-sand-200/60">
-                Payments
-              </dt>
-              <dd className="mt-1 font-display text-xl text-paper">
-                Cards &amp; transfer
-              </dd>
-            </div>
-          </dl>
         </div>
 
-        {/* Signature visual: mocked estate-agent listing tile */}
-        <div className="relative mx-auto w-full max-w-md lg:max-w-none">
-          <div
-            aria-hidden="true"
-            className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-bronze-500/30 to-transparent blur-2xl"
-          />
-          <div className="overflow-hidden rounded-3xl border border-paper/10 bg-sand-50 shadow-2xl">
-            {/* Replace with real property photography */}
-            <div className="relative aspect-[4/3] w-full overflow-hidden bg-espresso-700">
-              <Image
-                src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=900&q=80"
-                alt="Bright modern living room, sample property photography placeholder"
-                fill
-                sizes="(max-width: 1024px) 90vw, 480px"
-                className="object-cover"
-                priority
-              />
-              <div className="absolute left-3 top-3 flex gap-1.5">
-                <span className="rounded-full bg-paper/95 px-2.5 py-1 text-[11px] font-semibold text-espresso-900 shadow-sm">
-                  3D Tour
-                </span>
-                <span className="rounded-full bg-paper/95 px-2.5 py-1 text-[11px] font-semibold text-espresso-900 shadow-sm">
-                  EPC: B
-                </span>
-              </div>
-            </div>
-
-            <div className="p-5">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <p className="font-display text-lg font-semibold text-espresso-900">
-                    3 Bed Garden Flat
-                  </p>
-                  <p className="text-sm text-espresso-700/70">
-                    Illustrative listing · for demonstration only
-                  </p>
-                </div>
-              </div>
-
-              <div className="mt-4 flex items-center justify-between border-t border-espresso-900/8 pt-4 text-xs text-espresso-700/70">
-                <span>Listed with the full marketing package</span>
-                <span className="inline-flex items-center gap-1 font-medium text-bronze-600">
-                  <span className="h-1.5 w-1.5 rounded-full bg-bronze-500" />
-                  Tour + EPC + Photos
-                </span>
-              </div>
-            </div>
+        {/* Floor plan canvas — fills remaining viewport height */}
+        <div className="mx-auto mt-8 w-full max-w-[1400px] px-5 sm:px-8 flex-1 min-h-0">
+          <div className="relative w-full h-full overflow-hidden rounded-2xl">
+            <FloorPlanClient />
           </div>
         </div>
-      </div>
-    </section>
+
+        {/* Sub-headline */}
+        <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8 shrink-0">
+          <div className="py-12 sm:py-16 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between sm:gap-12">
+            <p className="max-w-xl text-base leading-relaxed text-espresso-900/60">
+              Accredited Energy Performance Certificates, immersive 3D virtual
+              tours, and magazine-standard photography for landlords, estate
+              agents &amp; property managers across {siteConfig.serviceArea}.
+            </p>
+            <a
+              href="#services"
+              className="shrink-0 text-sm font-medium text-espresso-900/70 underline-offset-4 transition-colors hover:text-espresso-900 hover:underline"
+            >
+              Explore services &rarr;
+            </a>
+          </div>
+        </div>
+      </section>
+
+    </>
   );
 }

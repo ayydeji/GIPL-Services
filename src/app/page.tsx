@@ -1,27 +1,37 @@
-import { Header } from "@/components/Header";
+import Image from "next/image";
 import { Hero } from "@/components/Hero";
+import { AboutUs } from "@/components/AboutUs";
+import { CalBooking } from "@/components/CalBooking";
 import { Services } from "@/components/Services";
-import { Pricing } from "@/components/Pricing";
-import { About } from "@/components/About";
-import { QuoteSection } from "@/components/QuoteSection";
-import { Contact } from "@/components/Contact";
-import { FloatingCta } from "@/components/FloatingCta";
+import { TrustStrip } from "@/components/TrustStrip";
+import { Statement } from "@/components/Statement";
+import { Personas } from "@/components/Personas";
+import { Faq } from "@/components/Faq";
+import { CtaBanner } from "@/components/CtaBanner";
 import { Footer } from "@/components/Footer";
+import { FloatingCta } from "@/components/FloatingCta";
+import { siteConfig } from "@/lib/site-config";
 
 export default function Home() {
   return (
     <>
-      <Header />
       <main>
         <Hero />
+        <TrustStrip />
+        <AboutUs />
+        <CalBooking />
+
+        
+
         <Services />
-        <Pricing />
-        <About />
-        <QuoteSection />
-        <Contact />
+        
+        {/* <Statement /> */}
+        <Personas />
+        <Faq />
+        <CtaBanner />
       </main>
       <Footer />
-      <FloatingCta />
+      {/* <FloatingCta /> */}
     </>
   );
 }

@@ -1,0 +1,88 @@
+---
+description: Editorial design principles for GIPL Services — fonts, colour, structure, and stack guardrails.
+globs: src/**/*.{tsx,css}
+alwaysApply: false
+---
+
+# GIPL Services — Editorial Design
+
+## Ethos
+This is a print-magazine confident website, not an agency template. Every decision should feel deliberate: generous whitespace, strong typographic hierarchy, restraint over decoration. The audience — estate agents, landlords, building associates — expects professionalism and trust, not startup flair.
+
+## Audience lens
+Signal: competence, premium quality, reliability.
+Avoid: SaaS gradients, clip-art icons, generic hero stock photos, over-animated UI.
+
+---
+
+## Typography
+
+**Two fonts, two roles — never blurred.**
+
+| Role | Font | Usage |
+|------|------|-------|
+| Display / editorial | Fraunces (serif) | Section headlines, hero H1, pull quotes, italic emphasis |
+| Body / UI | General Sans (geometric humanist sans) | Body copy, nav, labels, buttons, captions |
+
+- Fraunces carries the editorial voice: use it large, with tight leading (`leading-[1.05]`–`leading-[1.1]`), and lean into its optical italic for emphasis.
+- General Sans is quiet and confident: regular weight for body, medium/semibold for UI labels and buttons. Never use it for hero headlines.
+- Eyebrow labels (section identifiers): General Sans, uppercase, tracked (`tracking-[0.12em]`–`tracking-[0.16em]`), small size.
+- Push scale contrast hard — the gap between the smallest and largest type on a section should feel intentional, not accidental.
+
+### Font loading (self-hosted, variable)
+General Sans is loaded via `next/font/local` in `layout.tsx` — NOT `next/font/google`. Files live at:
+- `public/fonts/GeneralSans-Variable.woff2`
+- `public/fonts/GeneralSans-VariableItalic.woff2`
+
+```tsx
+// layout.tsx — replace the Inter import
+import localFont from "next/font/local";
+
+const generalSans = localFont({
+  src: [
+    { path: "../../public/fonts/GeneralSans-Variable.woff2", style: "normal" },
+    { path: "../../public/fonts/GeneralSans-VariableItalic.woff2", style: "italic" },
+  ],
+  variable: "--font-sans",
+  display: "swap",
+});
+```
+
+The `--font-sans` CSS token in `globals.css` stays unchanged; only its source changes.
+
+---
+
+## Colour
+
+One palette, paper-forward, one accent.
+
+- Background: `bg-paper` (`#FAF8F5`) — the default canvas.
+- Text: `text-ink` (`#3D3126`) — rich, warm dark.
+- Accent: `text-accent` / `bg-accent` (`#B38B5D`) — used sparingly for one focal point per section (a CTA, a stat, a rule line).
+- Never introduce raw hex values in components. All values live in `@theme` inside `globals.css`.
+- Colour carries hierarchy: if you reach for a new colour to solve a layout problem, solve the layout problem instead.
+- Dark sections (e.g. `bg-espresso-900` hero) are valid for contrast rhythm but limit to one or two per page.
+
+---
+
+## Structure
+
+- **Section rhythm**: each section has one clear job. No section should attempt to do two things.
+- **Hairline rules**: use `border-t border-ink/10` (or `border-paper/10` on dark) to separate content regions within a section — avoid heavy dividers.
+- **Numbered / labeled sections**: editorial style uses explicit section labels (e.g. `01 Services`, `02 Pricing`) as eyebrows to orient the reader.
+- **Asymmetry**: favour offset grids (`lg:grid-cols-[1.05fr_1fr]`) and intentional imbalance over symmetric two-column splits.
+- **Whitespace**: padding/margin should feel generous at every breakpoint. When in doubt, add more vertical space, not less.
+- Section order is fixed: `Header → Hero → Services → Pricing → About → QuoteSection → Contact → Footer`. Do not reorder without explicit instruction.
+
+---
+
+## Motion
+- Scroll-reveal is handled by `useReveal` (`src/lib/use-reveal.ts`) + `.reveal` / `.is-visible` classes in `globals.css`. Use this pattern — do not add new animation libraries.
+- `prefers-reduced-motion` is already respected globally in `globals.css`. Never add `transition` or `animation` without this coverage.
+
+---
+
+## Stack guardrails
+- **Tokens first**: all design tokens (colours, fonts, shadows) live in `@theme` in `globals.css`. Use Tailwind utility classes that map to these tokens.
+- **Content**: all copy, contact details, service names, and pricing live in `src/lib/site-config.ts`. Never hardcode them in components.
+- **Accessibility**: `focus-visible` ring is set globally. Maintain colour contrast ratios (WCAG AA minimum).

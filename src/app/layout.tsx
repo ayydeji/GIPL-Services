@@ -1,19 +1,20 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
+import { Header } from "@/components/Header";
 
-const fraunces = Fraunces({
-  variable: "--font-display",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
-  display: "swap",
-});
-
-const inter = Inter({
+const generalSans = localFont({
+  src: [
+    {
+      path: "../../public/fonts/GeneralSans-Variable.woff2",
+      style: "normal",
+    },
+    {
+      path: "../../public/fonts/GeneralSans-VariableItalic.woff2",
+      style: "italic",
+    },
+  ],
   variable: "--font-sans",
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -22,24 +23,26 @@ const siteUrl = "https://www.gipl-services.co.uk";
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
-    default: "GIPL Services | 3D Virtual Tours, EPC & Property Photography",
+    default: "GIPL Services | EPC Certificates, 3D Virtual Tours & Property Photography",
     template: "%s | GIPL Services",
   },
   description:
-    "Groove Park Investment Limited (GIPL Services) provides professional 3D virtual tours, EPC certificates, and property photography for landlords, estate agents, and property professionals across London and the South East.",
+    "Groove Park Investment Limited (GIPL Services) provides accredited EPC certificates, 3D virtual tours, and property photography for landlords, estate agents, and property professionals across London and the South East.",
   keywords: [
-    "3D virtual tours",
     "EPC certificate",
     "Energy Performance Certificate",
+    "3D virtual tours",
     "property photography",
     "estate agent photography",
     "London property marketing",
+    "EPC London",
+    "EPC Kent",
   ],
   authors: [{ name: "Groove Park Investment Limited" }],
   openGraph: {
-    title: "GIPL Services | Professional Property Marketing",
+    title: "GIPL Services | EPC Certificates & Property Marketing",
     description:
-      "High-quality 3D Virtual Tours, EPC Certificates, and Property Photography for landlords, estate agents, and property professionals.",
+      "Accredited EPC Certificates, 3D Virtual Tours, and Property Photography for landlords, estate agents, and property professionals.",
     url: siteUrl,
     siteName: "GIPL Services",
     locale: "en_GB",
@@ -47,9 +50,9 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "GIPL Services | Professional Property Marketing",
+    title: "GIPL Services | EPC Certificates & Property Marketing",
     description:
-      "High-quality 3D Virtual Tours, EPC Certificates, and Property Photography for landlords, estate agents, and property professionals.",
+      "Accredited EPC Certificates, 3D Virtual Tours, and Property Photography for landlords, estate agents, and property professionals.",
   },
   robots: {
     index: true,
@@ -62,12 +65,12 @@ const jsonLd = {
   "@type": "LocalBusiness",
   name: "GIPL Services (Groove Park Investment Limited)",
   description:
-    "Professional 3D virtual tours, EPC certificates, and property photography for landlords, estate agents, and property professionals.",
+    "Accredited EPC certificates, 3D virtual tours, and property photography for landlords, estate agents, and property professionals.",
   areaServed: ["London", "Kent", "South East England"],
   telephone: "+44-20-3598-2318",
   email: "contact@gipl-services.co.uk",
   url: siteUrl,
-  priceRange: "\u00a3\u00a3",
+  priceRange: "££",
 };
 
 export default function RootLayout({
@@ -76,7 +79,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={generalSans.variable}>
       <head>
         <script
           type="application/ld+json"
@@ -84,6 +87,7 @@ export default function RootLayout({
         />
       </head>
       <body className="min-h-screen bg-paper text-ink antialiased font-sans">
+        <Header />
         {children}
       </body>
     </html>
