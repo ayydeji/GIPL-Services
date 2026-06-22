@@ -1,15 +1,42 @@
+"use client";
+
+import { m } from "framer-motion";
 import { navLinks, siteConfig, services } from "@/lib/site-config";
+import {
+  fadeUpItem,
+  fadeUpStagger,
+  wordmarkReveal,
+} from "@/lib/motion";
+import { useScrollReveal } from "@/lib/use-scroll-reveal";
 
 export function Footer() {
   const year = new Date().getFullYear();
+  const { ref: footerRef, state: footerState } = useScrollReveal<HTMLElement>();
+  const { ref: wordmarkRef, state: wordmarkState } = useScrollReveal<HTMLDivElement>();
+
+  const wordmarkAnimate =
+    footerState === "hidden"
+      ? "hidden"
+      : footerState === "leaving"
+        ? "leaving"
+        : wordmarkState === "visible"
+          ? "visible"
+          : "leaving";
 
   return (
-    <footer className="bg-paper text-espresso-900/65">
-      {/* Main footer grid */}
+    <m.footer
+      ref={footerRef}
+      className="bg-paper text-espresso-900/65"
+      variants={fadeUpStagger}
+      initial="hidden"
+      animate={footerState}
+    >
       <div className="mx-auto max-w-[1400px] px-5 pt-[clamp(5rem,7vw,7.5rem)] pb-4 sm:px-8 sm:pb-6">
-        <div className="grid justify-items-center gap-12 text-center sm:grid-cols-2 lg:grid-cols-4">
-          {/* Brand */}
-          <div>
+        <m.div
+          className="grid justify-items-center gap-12 text-center sm:grid-cols-2 lg:grid-cols-4"
+          variants={fadeUpStagger}
+        >
+          <m.div variants={fadeUpItem}>
             <span className="text-xl font-bold tracking-[-0.02em] text-espresso-900">
               GIPL <span className="text-bronze-600">Services</span>
             </span>
@@ -18,10 +45,9 @@ export function Footer() {
               for landlords, agents, and homeowners across{" "}
               {siteConfig.serviceArea}.
             </p>
-          </div>
+          </m.div>
 
-          {/* Services */}
-          <div>
+          <m.div variants={fadeUpItem}>
             <h3 className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-bronze-600">
               Services
             </h3>
@@ -37,10 +63,9 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
+          </m.div>
 
-          {/* Contact */}
-          <div>
+          <m.div variants={fadeUpItem}>
             <h3 className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-bronze-600">
               Contact
             </h3>
@@ -63,10 +88,9 @@ export function Footer() {
               </li>
               <li className="text-espresso-900/45">{siteConfig.address}</li>
             </ul>
-          </div>
+          </m.div>
 
-          {/* Navigate */}
-          <div>
+          <m.div variants={fadeUpItem}>
             <h3 className="mb-5 text-xs font-semibold uppercase tracking-[0.16em] text-bronze-600">
               Navigate
             </h3>
@@ -82,27 +106,32 @@ export function Footer() {
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
+          </m.div>
+        </m.div>
 
-        {/* Bottom bar */}
-        <div className="mt-16 flex flex-col items-center gap-3 border-t border-espresso-900/10 pt-8 text-center text-xs text-espresso-900/40">
+        <m.div
+          className="mt-16 flex flex-col items-center gap-3 border-t border-espresso-900/10 pt-8 text-center text-xs text-espresso-900/40"
+          variants={fadeUpItem}
+        >
           <p>
             © {year} {siteConfig.companyLegalName}. All rights reserved.
           </p>
-          <p>{siteConfig.brandName} · EPC · 3D Tours · Photography</p>
-        </div>
+          <p>{siteConfig.brandName} · EPC · 3D Tours · Floor Plans</p>
+        </m.div>
       </div>
 
-      {/* Giant wordmark */}
-      <div
+      <m.div
+        ref={wordmarkRef}
         aria-hidden="true"
         className="footer-wordmark-wrap w-full px-5 pt-2 pb-6 sm:px-8 sm:pb-8"
+        variants={wordmarkReveal}
+        initial="hidden"
+        animate={wordmarkAnimate}
       >
         <p className="footer-wordmark select-none text-center font-bold tracking-[-0.05em] text-espresso-900/20">
           GIPL Services
         </p>
-      </div>
-    </footer>
+      </m.div>
+    </m.footer>
   );
 }

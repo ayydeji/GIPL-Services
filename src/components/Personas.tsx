@@ -1,8 +1,15 @@
 "use client";
 
+import { AnimatePresence, m } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
 import { personas } from "@/lib/site-config";
-import { useReveal } from "@/lib/use-reveal";
+import {
+  fadeUpItem,
+  fadeUpStagger,
+  personaContentEnter,
+  splitFromLeft,
+} from "@/lib/motion";
+import { useScrollReveal } from "@/lib/use-scroll-reveal";
 
 const DEFAULT_PERSONA_INDEX = personas.findIndex((p) => p.selectLabel === "Landlord");
 const headingSize = "clamp(2rem, 4.5vw, 3.5rem)";
@@ -155,8 +162,83 @@ function PersonaSelect({
   );
 }
 
+function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
+  return (
+    <>
+      <m.p
+        className="text-lg leading-relaxed text-espresso-900/70"
+        variants={fadeUpItem}
+      >
+        {persona.intro}
+      </m.p>
+
+      <m.ul className="mt-8 space-y-5" variants={fadeUpStagger}>
+        {persona.highlights.map((item) => (
+          <m.li
+            key={item.point}
+            className="flex items-start gap-3.5 text-base leading-relaxed text-espresso-900/65"
+            variants={fadeUpItem}
+          >
+            <span
+              aria-hidden="true"
+              className="mt-2 h-2 w-2 shrink-0 rounded-full border border-espresso-900/30"
+            />
+            <span>
+              <strong className="font-semibold text-espresso-900">
+                {item.point}.
+              </strong>{" "}
+              {item.detail}
+            </span>
+          </m.li>
+        ))}
+      </m.ul>
+
+      <m.div className="mt-10" variants={fadeUpItem}>
+        <p className="text-xs font-semibold uppercase tracking-[0.16em] text-espresso-800/55">
+          Recommendations
+        </p>
+        <div className="mt-5 flex flex-wrap gap-3">
+          {persona.recommended.map((rec) => {
+            const isBooking = rec.href.startsWith("http");
+            return (
+              <a
+                key={rec.label}
+                href={rec.href}
+                target={isBooking ? "_blank" : undefined}
+                rel={isBooking ? "noopener noreferrer" : undefined}
+                className={`inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors ${
+                  isBooking
+                    ? "bg-espresso-900 text-paper hover:bg-bronze-600"
+                    : "border border-espresso-900/15 text-espresso-900 hover:border-bronze-500/60 hover:text-bronze-600"
+                }`}
+              >
+                {rec.label}
+                <svg
+                  width="11"
+                  height="11"
+                  viewBox="0 0 12 12"
+                  fill="none"
+                  aria-hidden="true"
+                >
+                  <path
+                    d="M2 6H10M10 6L7 3M10 6L7 9"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  />
+                </svg>
+              </a>
+            );
+          })}
+        </div>
+      </m.div>
+    </>
+  );
+}
+
 export function Personas() {
-  const revealRef = useReveal<HTMLDivElement>();
+  const { ref, state } = useScrollReveal<HTMLDivElement>();
   const [selectedIndex, setSelectedIndex] = useState(
     DEFAULT_PERSONA_INDEX >= 0 ? DEFAULT_PERSONA_INDEX : 0,
   );
@@ -165,12 +247,14 @@ export function Personas() {
   return (
     <section id="who" className="section-space bg-paper">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <div
-          ref={revealRef}
-          className="reveal grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-16 xl:gap-24"
+        <m.div
+          ref={ref}
+          className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-16 xl:gap-24"
+          variants={fadeUpStagger}
+          initial="hidden"
+          animate={state}
         >
-          {/* Left: section title */}
-          <div className="lg:pt-2">
+          <m.div className="lg:pt-2" variants={splitFromLeft}>
             <h2
               className="section-heading flex flex-wrap items-baseline gap-x-3 gap-y-2"
               style={{ fontSize: headingSize }}
@@ -181,76 +265,28 @@ export function Personas() {
                 onChange={setSelectedIndex}
               />
             </h2>
-          </div>
+          </m.div>
 
-          {/* Right: details & recommendations */}
-          <div key={persona.number} className="transition-opacity duration-300">
-            <p className="text-lg leading-relaxed text-espresso-900/70">
-              {persona.intro}
-            </p>
-
-            <ul className="mt-8 space-y-5">
-              {persona.highlights.map((item) => (
-                <li
-                  key={item.point}
-                  className="flex items-start gap-3.5 text-base leading-relaxed text-espresso-900/65"
+          <div className="min-h-0">
+            <AnimatePresence mode="wait">
+              <m.div
+                key={persona.number}
+                variants={personaContentEnter}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+              >
+                <m.div
+                  variants={fadeUpStagger}
+                  initial="hidden"
+                  animate={state === "visible" ? "visible" : "leaving"}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="mt-2 h-2 w-2 shrink-0 rounded-full border border-espresso-900/30"
-                  />
-                  <span>
-                    <strong className="font-semibold text-espresso-900">
-                      {item.point}.
-                    </strong>{" "}
-                    {item.detail}
-                  </span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-10">
-              <p className="text-xs font-semibold uppercase tracking-[0.16em] text-espresso-800/55">
-                Recommendations
-              </p>
-              <div className="mt-5 flex flex-wrap gap-2.5">
-                {persona.recommended.map((rec) => {
-                  const isBooking = rec.href.startsWith("http");
-                  return (
-                    <a
-                      key={rec.label}
-                      href={rec.href}
-                      target={isBooking ? "_blank" : undefined}
-                      rel={isBooking ? "noopener noreferrer" : undefined}
-                      className={`inline-flex w-fit items-center gap-2 rounded-full px-4 py-2 text-xs font-semibold transition-colors ${
-                        isBooking
-                          ? "bg-espresso-900 text-paper hover:bg-bronze-600"
-                          : "border border-espresso-900/20 text-espresso-900 hover:border-espresso-900/55"
-                      }`}
-                    >
-                      {rec.label}
-                      <svg
-                        width="10"
-                        height="10"
-                        viewBox="0 0 12 12"
-                        fill="none"
-                        aria-hidden="true"
-                      >
-                        <path
-                          d="M2 6H10M10 6L7 3M10 6L7 9"
-                          stroke="currentColor"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
+                  <PersonaContent persona={persona} />
+                </m.div>
+              </m.div>
+            </AnimatePresence>
           </div>
-        </div>
+        </m.div>
       </div>
     </section>
   );

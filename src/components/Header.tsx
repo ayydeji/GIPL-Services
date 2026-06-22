@@ -1,16 +1,27 @@
 "use client";
 
+import { AnimatePresence, m } from "framer-motion";
 import { useState } from "react";
-import { navLinks, EPC_BOOKING_URL } from "@/lib/site-config";
+import { navLinks } from "@/lib/site-config";
+import {
+  headerLoad,
+  mobileMenuItem,
+  mobileMenuPanel,
+  mobileMenuStagger,
+} from "@/lib/motion";
 
 export function Header() {
   const [open, setOpen] = useState(false);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 bg-paper/90 backdrop-blur-md">
+    <m.header
+      className="fixed inset-x-0 top-0 z-50 bg-paper/90 backdrop-blur-md"
+      variants={headerLoad}
+      initial="hidden"
+      animate="visible"
+    >
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <div className="flex h-14 items-center justify-center sm:h-16">
-          {/* Nav — centered */}
+        <div className="flex h-14 items-center justify-end sm:h-16 sm:justify-center">
           <nav className="hidden sm:flex items-center gap-8">
             {navLinks.map((link) => (
               <a
@@ -23,44 +34,61 @@ export function Header() {
             ))}
           </nav>
 
-          {/* Mobile hamburger */}
           <button
+            type="button"
             aria-label="Toggle menu"
+            aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
             className="flex sm:hidden flex-col justify-center items-center gap-[5px] w-8 h-8"
           >
-            <span className={`block h-px w-5 bg-espresso-900 transition-transform origin-center ${open ? "translate-y-[6px] rotate-45" : ""}`} />
-            <span className={`block h-px w-5 bg-espresso-900 transition-opacity ${open ? "opacity-0" : ""}`} />
-            <span className={`block h-px w-5 bg-espresso-900 transition-transform origin-center ${open ? "translate-y-[-6px] -rotate-45" : ""}`} />
+            <m.span
+              className="block h-px w-5 bg-espresso-900 origin-center"
+              animate={open ? { y: 6, rotate: 45 } : { y: 0, rotate: 0 }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            />
+            <m.span
+              className="block h-px w-5 bg-espresso-900"
+              animate={open ? { opacity: 0, scaleX: 0.6 } : { opacity: 1, scaleX: 1 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            />
+            <m.span
+              className="block h-px w-5 bg-espresso-900 origin-center"
+              animate={open ? { y: -6, rotate: -45 } : { y: 0, rotate: 0 }}
+              transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
+            />
           </button>
         </div>
       </div>
 
-      {/* Mobile dropdown */}
-      {open && (
-        <div className="sm:hidden border-t border-espresso-900/8 bg-paper px-5 pb-6 pt-4">
-          <nav className="flex flex-col gap-4">
-            {navLinks.map((link) => (
-              <a
-                key={link.href}
-                href={link.href}
-                onClick={() => setOpen(false)}
-                className="text-base text-espresso-900/70 transition-colors hover:text-espresso-900"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-          <a
-            href={EPC_BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-6 inline-flex w-full items-center justify-center rounded-full bg-espresso-900 px-5 py-3 text-sm font-semibold text-paper"
+      <AnimatePresence initial={false}>
+        {open && (
+          <m.div
+            key="mobile-menu"
+            className="sm:hidden overflow-hidden border-t bg-paper"
+            variants={mobileMenuPanel}
+            initial="hidden"
+            animate="visible"
+            exit="exit"
           >
-            Book an EPC
-          </a>
-        </div>
-      )}
-    </header>
+            <m.nav
+              className="flex flex-col gap-4 px-5 pb-6 pt-4"
+              variants={mobileMenuStagger}
+            >
+              {navLinks.map((link) => (
+                <m.a
+                  key={link.href}
+                  href={link.href}
+                  onClick={() => setOpen(false)}
+                  className="text-base text-espresso-900/70 transition-colors hover:text-espresso-900"
+                  variants={mobileMenuItem}
+                >
+                  {link.label}
+                </m.a>
+              ))}
+            </m.nav>
+          </m.div>
+        )}
+      </AnimatePresence>
+    </m.header>
   );
 }

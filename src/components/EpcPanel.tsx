@@ -9,71 +9,29 @@ export function EpcPanel({ roomId }: { roomId: string }) {
   const color = EPC_COLORS[data.rating] ?? EPC_COLORS["D"];
 
   return (
-    <div
-      style={{
-        background: "transparent",
-        border: `1.5px dashed ${color}`,
-        borderRadius: "10px",
-        padding: "10px 12px",
-        display: "flex",
-        flexDirection: "column",
-        gap: "7px",
-      }}
-    >
-      {/* Title + rating badge */}
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "8px" }}>
-        <p
-          style={{
-            fontSize: "11px",
-            fontWeight: 700,
-            textTransform: "uppercase",
-            letterSpacing: "0.08em",
-            lineHeight: 1.2,
-            color: "var(--color-espresso-900)",
-          }}
-        >
+    <div className="flex flex-col gap-1.5 rounded-xl bg-white p-3">
+      <div className="flex items-center justify-between gap-2">
+        <p className="text-[11px] font-bold uppercase tracking-[0.08em] leading-tight text-espresso-900">
           {data.title}
         </p>
         <span
-          style={{
-            background: color,
-            color: "#fff",
-            fontSize: "11px",
-            fontWeight: 800,
-            padding: "2px 7px",
-            borderRadius: "4px",
-            letterSpacing: "0.06em",
-            flexShrink: 0,
-          }}
+          className="shrink-0 rounded px-1.5 py-0.5 text-[11px] font-extrabold tracking-[0.06em] text-white"
+          style={{ background: color }}
         >
           {data.rating}
         </span>
       </div>
 
-      {/* Floor area + heating */}
-      <p
-        style={{
-          fontSize: "10px",
-          color: "var(--color-espresso-900)",
-          opacity: 0.55,
-          lineHeight: 1.3,
-          whiteSpace: "nowrap",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-        }}
-      >
+      <p className="truncate text-[10px] leading-snug text-espresso-900/55">
         {data.floorArea} m² &middot; {data.heating}
       </p>
 
-      {/* A–G mini scale */}
-      <div style={{ display: "flex", gap: "3px", alignItems: "center" }}>
+      <div className="flex items-center gap-0.5">
         {BANDS.map((band) => (
           <div
             key={band}
+            className="h-1 flex-1 rounded-sm"
             style={{
-              flex: 1,
-              height: "4px",
-              borderRadius: "2px",
               background: band === data.rating ? EPC_COLORS[band] : "rgba(61,49,38,0.1)",
             }}
           />

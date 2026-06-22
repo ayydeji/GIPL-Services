@@ -18,7 +18,8 @@ export default function Home() {
       <main>
         <Hero />
         <TrustStrip />
-        <AboutUs />
+        <Personas />
+        
         <CalBooking />
 
         
@@ -26,7 +27,7 @@ export default function Home() {
         <Services />
         
         {/* <Statement /> */}
-        <Personas />
+        <AboutUs />
         <Faq />
         <CtaBanner />
       </main>

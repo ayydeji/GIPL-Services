@@ -4,13 +4,8 @@ import { useEffect, useRef, useCallback, useState } from "react";
 import Image from "next/image";
 import * as THREE from "three";
 import { TOKENS, EPC_COLORS, readToken } from "@/lib/floor-plan-data";
+import { buildFloorPlanForServices, hex, type TokMap } from "@/lib/floor-plan-scene";
 import type { ServiceVisual } from "@/lib/site-config";
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-type TokMap = Record<keyof typeof TOKENS, string>;
 
 interface Props {
   active: ServiceVisual;
@@ -22,10 +17,6 @@ interface Props {
 // ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function hex(token: string): number {
-  return parseInt(token.replace("#", ""), 16);
-}
 
 function clamp(v: number, lo: number, hi: number) {
   return Math.max(lo, Math.min(hi, v));
@@ -222,79 +213,10 @@ function buildTourRoom(tok: TokMap): THREE.Group {
 }
 
 /**
- * Photography — several thin-framed PlaneGeometry "photo" planes drifting at
- * varying depths. Front plane has bronze frame, higher opacity.
+ * Full apartment floor plan — same geometry as the hero, scaled for the card.
  */
-function buildPhotoFrames(tok: TokMap): THREE.Group {
-  const g = new THREE.Group();
-
-  interface FrameDef {
-    w: number;
-    h: number;
-    x: number;
-    y: number;
-    z: number;
-    rotY: number;
-    front: boolean;
-  }
-
-  const frames: FrameDef[] = [
-    { w: 2.0, h: 1.4, x: 0,    y: 0,     z: 0,    rotY: 0,             front: true  },
-    { w: 1.1, h: 0.85, x: -1.5, y: 0.3,  z: -1.2, rotY: 0.25,          front: false },
-    { w: 0.9, h: 0.7,  x: 1.4,  y: -0.2, z: -1.5, rotY: -0.2,          front: false },
-    { w: 0.75, h: 0.6, x: -0.4, y: 0.7,  z: -2.2, rotY: 0.1,           front: false },
-  ];
-
-  frames.forEach(({ w, h, x, y, z, rotY, front }) => {
-    const frameColor = front ? hex(tok.bronze500) : hex(tok.tan400);
-    const opacity = front ? 0.92 : clamp(0.18 + (z + 2.2) * 0.12, 0.12, 0.45);
-
-    // Photo fill (translucent warm rect)
-    const fillGeo = new THREE.PlaneGeometry(w, h);
-    const fillMat = new THREE.MeshBasicMaterial({
-      color: front ? hex(tok.sand100) : hex(tok.sand200),
-      transparent: true,
-      opacity,
-      side: THREE.DoubleSide,
-    });
-    const fill = new THREE.Mesh(fillGeo, fillMat);
-    fill.position.set(x, y, z);
-    fill.rotation.y = rotY;
-    g.add(fill);
-
-    // Frame border (EdgesGeometry of a thin box)
-    const border = 0.06;
-    const frameGeo = new THREE.BoxGeometry(w + border, h + border, 0.04);
-    const frameEdges = new THREE.EdgesGeometry(frameGeo);
-    frameGeo.dispose();
-    const frameMat = new THREE.LineBasicMaterial({
-      color: frameColor,
-      transparent: true,
-      opacity: front ? 1.0 : 0.55,
-    });
-    const frameLines = new THREE.LineSegments(frameEdges, frameMat);
-    frameLines.position.set(x, y, z);
-    frameLines.rotation.y = rotY;
-    g.add(frameLines);
-
-    // Hang wire (thin line from top-centre to slightly above)
-    if (front) {
-      const wireGeo = new THREE.BufferGeometry().setFromPoints([
-        new THREE.Vector3(x - 0.3, y + h / 2, z),
-        new THREE.Vector3(x,       y + h / 2 + 0.4, z),
-        new THREE.Vector3(x + 0.3, y + h / 2, z),
-      ]);
-      const wireMat = new THREE.LineBasicMaterial({
-        color: hex(tok.espresso700),
-        transparent: true,
-        opacity: 0.4,
-      });
-      const wire = new THREE.Line(wireGeo, wireMat);
-      g.add(wire);
-    }
-  });
-
-  return g;
+function buildFloorPlan(tok: TokMap): THREE.Group {
+  return buildFloorPlanForServices(tok);
 }
 
 // ---------------------------------------------------------------------------
@@ -304,7 +226,7 @@ function buildPhotoFrames(tok: TokMap): THREE.Group {
 interface SceneGroups {
   "epc-ladder": THREE.Group;
   "tour-room": THREE.Group;
-  "photo-frames": THREE.Group;
+  "floor-plan": THREE.Group;
 }
 
 // ---------------------------------------------------------------------------
@@ -385,14 +307,13 @@ export default function ServiceVisual3D({ active, fallbackSrc, fallbackAlt }: Pr
 
     // ---- Build all three scene groups ----
     const groups: SceneGroups = {
-      "epc-ladder":   buildEpcLadder(tok),
-      "tour-room":    buildTourRoom(tok),
-      "photo-frames": buildPhotoFrames(tok),
+      "epc-ladder": buildEpcLadder(tok),
+      "tour-room": buildTourRoom(tok),
+      "floor-plan": buildFloorPlan(tok),
     };
     groupsRef.current = groups;
 
-    // Show only active, hide others
-    const visuals: ServiceVisual[] = ["epc-ladder", "tour-room", "photo-frames"];
+    const visuals: ServiceVisual[] = ["epc-ladder", "tour-room", "floor-plan"];
     visuals.forEach((v) => {
       groups[v].visible = v === activeRef.current;
       scene.add(groups[v]);

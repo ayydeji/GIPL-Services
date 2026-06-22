@@ -1,30 +1,40 @@
 "use client";
 
+import { m } from "framer-motion";
 import { faqs } from "@/lib/site-config";
-import { useReveal } from "@/lib/use-reveal";
+import { fadeUp, fadeUpItem, fadeUpStagger } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/use-scroll-reveal";
 
 export function Faq() {
-  const revealRef = useReveal<HTMLDivElement>();
+  const { ref, state } = useScrollReveal<HTMLDivElement>();
 
   return (
     <section id="faq" className="section-space bg-paper">
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
-        <div
-          ref={revealRef}
-          className="reveal mx-auto w-full max-w-3xl text-center"
+        <m.div
+          ref={ref}
+          className="mx-auto w-full max-w-3xl text-center"
+          variants={fadeUpStagger}
+          initial="hidden"
+          animate={state}
         >
-          <h2
+          <m.h2
             className="section-heading mb-12 sm:mb-14"
             style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}
+            variants={fadeUp}
           >
             FAQs
-          </h2>
+          </m.h2>
 
-          <div className="border-t border-espresso-900/10 text-center">
+          <m.div
+            className="border-t border-espresso-900/10 text-center"
+            variants={fadeUpStagger}
+          >
             {faqs.map((faq) => (
-              <details
+              <m.details
                 key={faq.question}
                 className="faq-item group border-b border-espresso-900/10"
+                variants={fadeUpItem}
               >
                 <summary className="grid cursor-pointer list-none grid-cols-[1fr_auto_1fr] items-center gap-4 py-7 sm:py-8">
                   <span aria-hidden="true" />
@@ -55,10 +65,10 @@ export function Faq() {
                     </div>
                   </div>
                 </div>
-              </details>
+              </m.details>
             ))}
-          </div>
-        </div>
+          </m.div>
+        </m.div>
       </div>
     </section>
   );

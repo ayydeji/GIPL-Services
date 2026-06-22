@@ -10,7 +10,7 @@ export const EPC_BOOKING_URL = "https://example.com/REPLACE_WITH_EPC_BOOKING_URL
 export const siteConfig = {
   companyLegalName: "Groove Park Investment Limited",
   brandName: "GIPL Services",
-  tagline: "EPC Certificates, 3D Virtual Tours & Property Photography",
+  tagline: "EPC Certificates, 3D Virtual Tours & Floor Plans",
   phone: "020 3598 2318",
   phoneHref: "tel:+442035982318",
   email: "contact@gipl-services.co.uk",
@@ -40,8 +40,8 @@ export const trustSignals = [
   "London & Kent",
 ];
 
-export type ServiceKey = "epc" | "virtual-tours" | "photography";
-export type ServiceVisual = "epc-ladder" | "tour-room" | "photo-frames";
+export type ServiceKey = "epc" | "virtual-tours" | "floor-plans";
+export type ServiceVisual = "epc-ladder" | "tour-room" | "floor-plan";
 
 export const services: {
   key: ServiceKey;
@@ -95,20 +95,20 @@ export const services: {
     ctaHref: "mailto:contact@gipl-services.co.uk",
   },
   {
-    key: "photography",
-    id: "photography",
-    name: "Property Photography",
-    shortName: "Photography",
-    tag: "Marketing",
+    key: "floor-plans",
+    id: "floor-plans",
+    name: "Floor Plans",
+    shortName: "Floor Plans",
+    tag: "Layout",
     image:
-      "https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=1200&q=80",
-    visual: "photo-frames",
+      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80",
+    visual: "floor-plan",
     description:
-      "Crisp, professionally lit photography that presents a property at its absolute best across every listing platform.",
+      "Accurate, professionally drawn floor plans that help buyers and tenants understand a property's layout at a glance.",
     benefits: [
-      "Magazine-standard imagery",
-      "Stronger marketing across every portal",
-      "More enquiries from the very first impression",
+      "Clear room dimensions and layout for every listing",
+      "Rightmove and Zoopla-ready marketing assets",
+      "Drawn to a consistent standard across your portfolio",
     ],
     ctaLabel: "Enquire",
     ctaHref: "mailto:contact@gipl-services.co.uk",
@@ -140,21 +140,21 @@ export const personas: Persona[] = [
       {
         point: "Listings go live faster",
         detail:
-          "Reliable turnaround on EPCs, photography, and virtual tours — so properties reach Rightmove and Zoopla without unnecessary delays.",
+          "Reliable turnaround on EPCs, floor plans, and virtual tours — so properties reach Rightmove and Zoopla without unnecessary delays.",
       },
       {
         point: "Consistent quality across every property",
         detail:
-          "Magazine-standard imagery and accredited certificates that reflect well on your agency, instruction after instruction.",
+          "Magazine-standard floor plans and accredited certificates that reflect well on your agency, instruction after instruction.",
       },
       {
         point: "One partner for compliance and marketing",
         detail:
-          "Book EPC, photography, and 3D tours together in a single visit — less coordination, fewer vendors to manage.",
+          "Book EPC, floor plans, and 3D tours together in a single visit — less coordination, fewer vendors to manage.",
       },
     ],
     recommended: [
-      { label: "Property Photography", href: "#photography" },
+      { label: "Floor Plans", href: "#floor-plans" },
       { label: "3D Virtual Tours", href: "#tours" },
       { label: "Book an EPC", href: EPC_BOOKING_URL },
     ],
@@ -179,7 +179,7 @@ export const personas: Persona[] = [
       {
         point: "Professional marketing that attracts tenants",
         detail:
-          "High-quality photography presents your property at its best and helps secure enquiries from day one.",
+          "Accurate floor plans help buyers and tenants understand the layout quickly and secure enquiries from day one.",
       },
       {
         point: "Qualified, accredited support you can trust",
@@ -189,7 +189,7 @@ export const personas: Persona[] = [
     ],
     recommended: [
       { label: "Book an EPC", href: EPC_BOOKING_URL },
-      { label: "Property Photography", href: "#photography" },
+      { label: "Floor Plans", href: "#floor-plans" },
     ],
   },
   {
@@ -212,13 +212,13 @@ export const personas: Persona[] = [
       {
         point: "Consistent marketing on every listing",
         detail:
-          "Professional photography and 3D tours to the same standard across all units, strengthening every listing.",
+          "Professional floor plans and 3D tours to the same standard across all units, strengthening every listing.",
       },
     ],
     recommended: [
       { label: "Book an EPC", href: EPC_BOOKING_URL },
       { label: "3D Virtual Tours", href: "#tours" },
-      { label: "Property Photography", href: "#photography" },
+      { label: "Floor Plans", href: "#floor-plans" },
     ],
   },
 ];
@@ -247,7 +247,7 @@ export const faqs: Faq[] = [
   {
     question: "Can I book more than one service in a single visit?",
     answer:
-      "Yes — and we'd recommend it. Combining an EPC with property photography or a 3D virtual tour in a single visit saves you time and qualifies for a multi-service discount. Get in touch to arrange a combined booking.",
+      "Yes — and we'd recommend it. Combining an EPC with floor plans or a 3D virtual tour in a single visit saves you time and qualifies for a multi-service discount. Get in touch to arrange a combined booking.",
   },
   {
     question: "Who carries out the EPC assessment?",
