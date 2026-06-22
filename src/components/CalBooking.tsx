@@ -11,7 +11,7 @@ export function CalBooking() {
 
   useEffect(() => {
     (async function () {
-      const cal = await getCalApi({ namespace: "coffee-w-abdullah" });
+      const cal = await getCalApi({ namespace: "15min" });
       cal("ui", {
         cssVarsPerTheme: {
           light: { "cal-brand": "#B38B5D" },
@@ -33,8 +33,8 @@ export function CalBooking() {
         animate={state}
       >
         <Cal
-          namespace="coffee-w-abdullah"
-          calLink="abdullahii/coffee-w-abdullah"
+          namespace="15min"
+          calLink="muhammad-kamal/15min"
           style={{ width: "100%", height: "100%", overflow: "scroll" }}
           config={{ layout: "month_view", useSlotsViewOnSmallScreen: "true" }}
         />
