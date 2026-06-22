@@ -20,7 +20,6 @@ export function Faq() {
         >
           <m.h2
             className="section-heading mb-12 sm:mb-14"
-            style={{ fontSize: "clamp(2.5rem, 5vw, 4.5rem)" }}
             variants={fadeUp}
           >
             FAQs

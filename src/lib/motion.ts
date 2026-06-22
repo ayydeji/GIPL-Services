@@ -108,10 +108,10 @@ export const trustSignalItem: Variants = {
 };
 
 export const splitFromLeft: Variants = {
-  hidden: { opacity: 0, x: -24 },
+  hidden: { opacity: 0, x: -16 },
   leaving: {
     opacity: 0.35,
-    x: -8,
+    x: 0,
     transition: leavingTransition,
   },
   visible: {
@@ -122,10 +122,10 @@ export const splitFromLeft: Variants = {
 };
 
 export const splitFromRight: Variants = {
-  hidden: { opacity: 0, x: 24 },
+  hidden: { opacity: 0, x: 16 },
   leaving: {
     opacity: 0.35,
-    x: 8,
+    x: 0,
     transition: leavingTransition,
   },
   visible: {
@@ -283,6 +283,108 @@ export const mobileMenuItem: Variants = {
     x: -6,
     y: -2,
     transition: { duration: 0.22, ease: EASE_EXIT },
+  },
+};
+
+export const epcDropdownPanel: Variants = {
+  hidden: { opacity: 0, y: -8, scale: 0.98 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.38, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    y: -6,
+    scale: 0.99,
+    transition: { duration: 0.28, ease: EASE_EXIT },
+  },
+};
+
+export const epcDropdownPanelReduced: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.2, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.15, ease: EASE_EXIT },
+  },
+};
+
+export const epcDropdownStagger: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.07,
+      delayChildren: 0.04,
+    },
+  },
+  exit: {
+    transition: {
+      staggerChildren: 0.03,
+      staggerDirection: -1,
+    },
+  },
+};
+
+export const epcDropdownStaggerReduced: Variants = {
+  hidden: {},
+  visible: {},
+  exit: {},
+};
+
+export const epcTierItem: Variants = {
+  hidden: { opacity: 0, y: 10 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.32, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    y: 6,
+    transition: { duration: 0.2, ease: EASE_EXIT },
+  },
+};
+
+export const epcTierItemReduced: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.15, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.1, ease: EASE_EXIT },
+  },
+};
+
+export const epcDropdownFooter: Variants = {
+  hidden: { opacity: 0, y: 6 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.32, ease: EASE_ENTER, delay: 0.18 },
+  },
+  exit: {
+    opacity: 0,
+    y: 4,
+    transition: { duration: 0.2, ease: EASE_EXIT },
+  },
+};
+
+export const epcDropdownFooterReduced: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.15, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.1, ease: EASE_EXIT },
   },
 };
 

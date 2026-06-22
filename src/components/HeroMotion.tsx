@@ -1,7 +1,10 @@
 "use client";
 
 import { m } from "framer-motion";
-import { EPC_BOOKING_URL, siteConfig } from "@/lib/site-config";
+import { BookServiceButton } from "@/components/BookServiceButton";
+import { FreeConsultationButton } from "@/components/FreeConsultationButton";
+import { HeroSeasonalBanner } from "@/components/HeroSeasonalBanner";
+import { siteConfig } from "@/lib/site-config";
 import { heroCanvas, heroHeadline, heroSubcopy } from "@/lib/motion";
 import FloorPlanClient from "@/components/FloorPlanClient";
 
@@ -9,10 +12,12 @@ export function HeroMotion() {
   return (
     <>
       <div className="mx-auto w-full max-w-[1400px] px-5 pt-14 sm:px-8 sm:pt-16 shrink-0">
+        <div className="mb-4 flex justify-center sm:mb-7">
+          <HeroSeasonalBanner />
+        </div>
         <div className="flex flex-col gap-7 sm:flex-row sm:items-start sm:justify-between sm:gap-12">
           <m.h1
-            className="max-w-[28ch] font-medium tracking-[-0.02em] leading-[1.1] text-espresso-900 text-balance"
-            style={{ fontSize: "clamp(1.6rem, 3.2vw, 3.5rem)" }}
+            className="hero-headline max-w-[28ch] font-medium tracking-[-0.02em] leading-[1.1] text-espresso-900 text-balance"
             variants={heroHeadline}
             initial="hidden"
             animate="visible"
@@ -23,21 +28,16 @@ export function HeroMotion() {
             <span className="text-bronze-500">one visit.</span>
           </m.h1>
 
-          <m.a
-            href={EPC_BOOKING_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex shrink-0 items-center gap-2 self-start rounded-full bg-espresso-900 px-7 py-3.5 text-sm font-semibold text-paper transition-colors hover:bg-bronze-600 sm:mt-2"
+          <m.div
+            className="hidden shrink-0 flex-col gap-3 self-start sm:mt-2 sm:flex sm:flex-row sm:items-center"
             variants={heroHeadline}
             initial="hidden"
             animate="visible"
             transition={{ delay: 0.08 }}
           >
-            Book an EPC
-            <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-              <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          </m.a>
+            <BookServiceButton serviceKey="epc" />
+            <FreeConsultationButton />
+          </m.div>
         </div>
       </div>
 

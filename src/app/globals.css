@@ -29,12 +29,14 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    overflow-x: clip;
   }
 
   body {
     background: var(--color-paper);
     color: var(--color-ink);
     font-family: var(--font-sans);
+    overflow-x: clip;
   }
 
   ::selection {
@@ -46,6 +48,11 @@
     outline: 2px solid var(--color-bronze-500);
     outline-offset: 2px;
   }
+}
+
+.hero-headline,
+.section-heading {
+  font-size: clamp(1.6rem, 3.2vw, 3.5rem);
 }
 
 .section-heading {
@@ -117,7 +124,9 @@ details.faq-item[open] .faq-chevron {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *:not(cal-modal-box):not(cal-inline),
+  *:not(cal-modal-box):not(cal-inline)::before,
+  *:not(cal-modal-box):not(cal-inline)::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { Header } from "@/components/Header";
+import { CalConsultationInit } from "@/components/CalConsultationInit";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 
 const generalSans = localFont({
@@ -68,8 +69,8 @@ const jsonLd = {
   description:
     "Accredited EPC certificates, 3D virtual tours, and floor plans for landlords, estate agents, and property professionals.",
   areaServed: ["London", "Kent", "South East England"],
-  telephone: "+44-20-3598-2318",
-  email: "contact@gipl-services.co.uk",
+  telephone: "+44-7495-331757",
+  email: "muhammad@gipl.uk",
   url: siteUrl,
   priceRange: "££",
 };
@@ -91,6 +92,7 @@ export default function RootLayout({
         <MotionProvider>
           <Header />
           {children}
+          <CalConsultationInit />
         </MotionProvider>
       </body>
     </html>

@@ -2,6 +2,8 @@
 
 import { AnimatePresence, m } from "framer-motion";
 import { useState } from "react";
+import { BookServiceButton } from "@/components/BookServiceButton";
+import { FreeConsultationButton } from "@/components/FreeConsultationButton";
 import { navLinks } from "@/lib/site-config";
 import {
   headerLoad,
@@ -64,7 +66,7 @@ export function Header() {
         {open && (
           <m.div
             key="mobile-menu"
-            className="sm:hidden overflow-hidden border-t bg-paper"
+            className="sm:hidden max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t bg-paper"
             variants={mobileMenuPanel}
             initial="hidden"
             animate="visible"
@@ -85,6 +87,23 @@ export function Header() {
                   {link.label}
                 </m.a>
               ))}
+
+              <m.div
+                className="mt-2 flex flex-col gap-3 border-t border-espresso-900/10 pt-4"
+                variants={mobileMenuItem}
+              >
+                <BookServiceButton
+                  serviceKey="epc"
+                  fullWidth
+                  expandInline
+                  menuAlign="left"
+                  onTierSelect={() => setOpen(false)}
+                />
+                <FreeConsultationButton
+                  className="w-full justify-center"
+                  onActivate={() => setOpen(false)}
+                />
+              </m.div>
             </m.nav>
           </m.div>
         )}

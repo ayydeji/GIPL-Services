@@ -1,6 +1,6 @@
 "use client";
 
-import { EPC_BOOKING_URL } from "@/lib/site-config";
+import { BookServiceButton } from "@/components/BookServiceButton";
 import { StaggerGroup, StaggerItem } from "@/components/motion/StaggerGroup";
 
 export function Statement() {
@@ -27,17 +27,7 @@ export function Statement() {
           </StaggerItem>
           <StaggerItem>
             <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
-              <a
-                href={EPC_BOOKING_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 rounded-full bg-espresso-900 px-7 py-3.5 text-sm font-semibold text-paper transition-colors hover:bg-bronze-600"
-              >
-                Book an EPC Assessment
-                <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-                  <path d="M3 8H13M13 8L9 4M13 8L9 12" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-              </a>
+              <BookServiceButton serviceKey="epc" longLabel />
               <a
                 href="#contact"
                 className="text-sm font-medium text-espresso-900/70 underline-offset-4 transition-colors hover:text-espresso-900 hover:underline"

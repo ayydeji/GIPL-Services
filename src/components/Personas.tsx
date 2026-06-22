@@ -2,7 +2,8 @@
 
 import { AnimatePresence, m } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
-import { personas } from "@/lib/site-config";
+import { personas, type PersonaRecommendation, type ServiceKey } from "@/lib/site-config";
+import { BookServiceButton } from "@/components/BookServiceButton";
 import {
   fadeUpItem,
   fadeUpStagger,
@@ -12,7 +13,7 @@ import {
 import { useScrollReveal } from "@/lib/use-scroll-reveal";
 
 const DEFAULT_PERSONA_INDEX = personas.findIndex((p) => p.selectLabel === "Landlord");
-const headingSize = "clamp(2rem, 4.5vw, 3.5rem)";
+const selectSize = "clamp(1.35rem, 2.6vw, 2.35rem)";
 
 function PersonaSelect({
   selectedIndex,
@@ -101,7 +102,7 @@ function PersonaSelect({
   }
 
   return (
-    <div ref={rootRef} className="relative inline-flex">
+    <div ref={rootRef} className="relative w-fit max-w-full">
       <button
         type="button"
         id="persona-select"
@@ -109,14 +110,14 @@ function PersonaSelect({
         aria-expanded={open}
         aria-controls={listboxId}
         onClick={toggleOpen}
-        className="section-heading inline-flex cursor-pointer items-center gap-3 rounded-full border border-espresso-900/20 bg-surface py-1 pr-4 pl-6 transition-colors hover:border-espresso-900/35"
-        style={{ fontSize: headingSize }}
+        className="inline-flex max-w-full cursor-pointer items-center gap-2.5 rounded-full border border-espresso-900/20 bg-surface px-5 py-3 font-medium leading-normal tracking-[-0.02em] text-ink whitespace-nowrap transition-colors hover:border-espresso-900/35"
+        style={{ fontSize: selectSize }}
       >
-        {personas[selectedIndex].selectLabel}
+        <span>{personas[selectedIndex].selectLabel}</span>
         <svg
-          className={`shrink-0 text-espresso-900/50 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          width="20"
-          height="20"
+          className={`shrink-0 text-espresso-900/45 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          width="16"
+          height="16"
           viewBox="0 0 24 24"
           fill="none"
           aria-hidden="true"
@@ -137,7 +138,7 @@ function PersonaSelect({
           id={listboxId}
           role="listbox"
           aria-labelledby="persona-select"
-          className="absolute top-[calc(100%+0.5rem)] left-0 z-20 min-w-full overflow-hidden rounded-2xl border border-espresso-900/10 bg-paper py-1.5 shadow-card"
+          className="absolute top-[calc(100%+0.5rem)] left-0 z-20 w-full min-w-[12rem] overflow-hidden rounded-2xl border border-espresso-900/10 bg-paper py-1.5 shadow-card"
         >
           {personas.map((p, i) => {
             const isSelected = i === selectedIndex;
@@ -164,6 +165,12 @@ function PersonaSelect({
       )}
     </div>
   );
+}
+
+function isBookingRecommendation(
+  rec: PersonaRecommendation,
+): rec is { label: string; serviceKey: ServiceKey } {
+  return "serviceKey" in rec;
 }
 
 function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
@@ -203,18 +210,21 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
         </p>
         <div className="mt-5 flex flex-wrap gap-3">
           {persona.recommended.map((rec) => {
-            const isBooking = rec.href.startsWith("http");
+            if (isBookingRecommendation(rec)) {
+              return (
+                <BookServiceButton
+                  key={rec.label}
+                  serviceKey={rec.serviceKey}
+                  variant="outline"
+                />
+              );
+            }
+
             return (
               <a
                 key={rec.label}
                 href={rec.href}
-                target={isBooking ? "_blank" : undefined}
-                rel={isBooking ? "noopener noreferrer" : undefined}
-                className={`inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors ${
-                  isBooking
-                    ? "bg-espresso-900 text-paper hover:bg-bronze-600"
-                    : "border border-espresso-900/15 text-espresso-900 hover:border-bronze-500/60 hover:text-bronze-600"
-                }`}
+                className="inline-flex w-fit items-center gap-2 rounded-full border border-espresso-900/15 px-6 py-3 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600"
               >
                 {rec.label}
                 <svg
@@ -249,21 +259,23 @@ export function Personas() {
   const persona = personas[selectedIndex];
 
   return (
-    <section id="who" className="section-space bg-paper">
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+    <section
+      id="who"
+      className="bg-paper pt-[clamp(5rem,7vw,7.5rem)] pb-[clamp(6.5rem,10vw,10rem)]"
+    >
+      <div className="mx-auto max-w-[1400px] overflow-x-clip px-5 sm:px-8">
         <m.div
           ref={ref}
-          className="grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.6fr)] lg:gap-16 xl:gap-24"
+          className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.35fr)] lg:gap-16 xl:gap-24"
           variants={fadeUpStagger}
           initial="hidden"
           animate={state}
         >
-          <m.div className="lg:pt-2" variants={splitFromLeft}>
+          <m.div className="lg:pt-1" variants={splitFromLeft}>
             <h2
-              className="section-heading flex flex-wrap items-baseline gap-x-3 gap-y-2"
-              style={{ fontSize: headingSize }}
+              className="section-heading flex flex-wrap items-center gap-x-3 gap-y-2 leading-[1.1]"
             >
-              <span>I am a</span>
+              <span className="shrink-0">I am a</span>
               <PersonaSelect
                 selectedIndex={selectedIndex}
                 onChange={setSelectedIndex}

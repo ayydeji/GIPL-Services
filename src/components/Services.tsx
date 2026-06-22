@@ -1,12 +1,14 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
-import { useEffect, useState, useCallback } from "react";
-import { services } from "@/lib/site-config";
+import { useEffect, useState, useCallback, useRef } from "react";
+import { services, serviceStartingPriceLabel, type ServiceKey } from "@/lib/site-config";
 import { useScrollStep } from "@/lib/use-scroll-step";
 import { cardSwap, fadeUp } from "@/lib/motion";
 import { useScrollReveal } from "@/lib/use-scroll-reveal";
 import ServiceVisualClient from "@/components/ServiceVisualClient";
+import { BookServiceButton } from "@/components/BookServiceButton";
+import { ServicesBookButton } from "@/components/ServicesBookButton";
 
 // ---------------------------------------------------------------------------
 // Shared sub-components
@@ -44,31 +46,20 @@ function Benefits({ items, compact }: { items: string[]; compact?: boolean }) {
 }
 
 function Cta({ service, compact }: { service: Service; compact?: boolean }) {
-  const isBooking = service.ctaHref.startsWith("http");
   return (
-    <a
-      href={service.ctaHref}
-      target={isBooking ? "_blank" : undefined}
-      rel={isBooking ? "noopener noreferrer" : undefined}
-      className={`inline-flex w-fit items-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors ${
-        compact ? "mt-4 py-2.5" : "mt-7"
-      } ${
-        isBooking
-          ? "bg-espresso-900 text-paper hover:bg-bronze-600"
-          : "border border-espresso-900/15 text-espresso-900 hover:border-bronze-500/60 hover:text-bronze-600"
-      }`}
-    >
-      {service.ctaLabel}
-      <svg width="11" height="11" viewBox="0 0 12 12" fill="none" aria-hidden="true">
-        <path
-          d="M2 6H10M10 6L7 3M10 6L7 9"
-          stroke="currentColor"
-          strokeWidth="1.5"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
-    </a>
+    <BookServiceButton
+      serviceKey={service.key}
+      compact={compact}
+      className={compact ? "mt-4" : "mt-7"}
+    />
+  );
+}
+
+function StartingPriceBadge({ serviceKey }: { serviceKey: ServiceKey }) {
+  return (
+    <span className="absolute right-4 top-4 rounded-full bg-bronze-500 px-3.5 py-1.5 text-xs font-semibold text-paper shadow-sm">
+      {serviceStartingPriceLabel(serviceKey)}
+    </span>
   );
 }
 
@@ -77,21 +68,32 @@ function Cta({ service, compact }: { service: Service; compact?: boolean }) {
 // ---------------------------------------------------------------------------
 
 function SectionHeader({ compact = false }: { compact?: boolean }) {
-  const { ref, state } = useScrollReveal<HTMLHeadingElement>();
+  const { ref, state } = useScrollReveal<HTMLDivElement>();
 
   return (
-    <m.h2
+    <m.div
       ref={ref}
-      className={`section-heading text-center section-header-space max-lg:text-balance lg:whitespace-nowrap ${
-        compact ? "!mb-0 !pb-4" : ""
+      className={`mx-auto w-full text-center section-header-space ${
+        compact ? "!mb-0 !pb-2" : ""
       }`}
-      style={{ fontSize: "clamp(2rem, 4.5vw, 3.5rem)" }}
       variants={fadeUp}
       initial="hidden"
       animate={state}
     >
-      Three services, one trusted partner.
-    </m.h2>
+      <h2
+        className="section-heading mx-auto w-full max-w-full text-balance lg:w-max lg:whitespace-nowrap lg:[text-wrap:nowrap]"
+      >
+        Three services, one trusted partner.
+      </h2>
+      <p
+        className={`mx-auto max-w-2xl leading-relaxed text-espresso-900/60 ${
+          compact ? "mt-3 text-sm" : "mt-5 text-base"
+        }`}
+      >
+        EPC certificates, floor plans, and 3D virtual tours — each priced by
+        property size, ready to book in one visit.
+      </p>
+    </m.div>
   );
 }
 
@@ -101,6 +103,7 @@ function SectionHeader({ compact = false }: { compact?: boolean }) {
 
 function DesktopStepper() {
   const { trackRef, activeIndex, scrollToStep } = useScrollStep(services.length);
+  const menuAnchorRef = useRef<HTMLDivElement>(null);
 
   const activeService = services[activeIndex];
   const posLabel = `${String(activeIndex + 1).padStart(2, "0")} / ${String(services.length).padStart(2, "0")}`;
@@ -111,15 +114,18 @@ function DesktopStepper() {
       className="bg-paper"
       style={{ height: `${services.length * 100}dvh` }}
     >
-      <div className="sticky top-14 sm:top-16 flex h-[calc(100dvh-3.5rem)] max-h-[calc(100dvh-3.5rem)] flex-col overflow-hidden bg-paper sm:h-[calc(100dvh-4rem)] sm:max-h-[calc(100dvh-4rem)]">
+      <div className="sticky top-14 sm:top-16 flex h-[calc(100dvh-3.5rem)] max-h-[calc(100dvh-3.5rem)] flex-col bg-paper sm:h-[calc(100dvh-4rem)] sm:max-h-[calc(100dvh-4rem)]">
         {/* Section title — always visible while stepping through services */}
-        <div className="relative z-10 mx-auto w-full max-w-[1400px] shrink-0 bg-paper px-5 pb-6 pt-0 sm:px-8">
+        <div className="relative z-10 mx-auto w-full max-w-[1400px] shrink-0 bg-paper px-5 pb-2 pt-0 sm:px-8">
           <SectionHeader compact />
         </div>
 
         {/* Nav + showcase card */}
-        <div className="mx-auto flex min-h-0 flex-1 w-full max-w-[1400px] items-stretch justify-center gap-10 px-5 pb-6 sm:px-8 sm:pb-8">
-          <nav className="flex w-52 shrink-0 flex-col gap-1" aria-label="Services">
+        <div className="relative z-20 mx-auto flex min-h-0 flex-1 w-full max-w-[1400px] items-stretch justify-center gap-10 overflow-visible px-5 pb-4 sm:px-8 sm:pb-5">
+          <nav
+            className="relative flex w-52 shrink-0 flex-col gap-1"
+            aria-label="Services"
+          >
               {services.map((s, i) => {
                 const isActive = i === activeIndex;
                 return (
@@ -165,12 +171,18 @@ function DesktopStepper() {
                   />
                 ))}
               </div>
+
+              <div
+                ref={menuAnchorRef}
+                className="relative mt-auto min-h-28 flex-1"
+                aria-hidden="true"
+              />
             </nav>
 
             {/* Showcase card */}
-            <div className="flex min-h-0 w-full max-w-96 flex-col xl:max-w-104">
-              <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-2xl bg-surface">
-                <div className="relative min-h-0 flex-1">
+            <div className="flex min-h-[min(640px,calc(100dvh-10rem))] w-full max-w-96 flex-col self-stretch overflow-visible xl:max-w-104">
+              <div className="flex min-h-0 flex-1 flex-col overflow-visible rounded-2xl bg-surface">
+                <div className="relative min-h-[min(320px,42dvh)] flex-1 overflow-hidden">
                   <ServiceVisualClient
                     active={activeService.visual}
                     fallbackSrc={activeService.image}
@@ -179,12 +191,13 @@ function DesktopStepper() {
                   <span className="absolute left-4 top-4 rounded-full bg-paper/95 px-3.5 py-1.5 text-xs font-semibold text-espresso-900 shadow-sm">
                     {activeService.tag}
                   </span>
+                  <StartingPriceBadge serviceKey={activeService.key} />
                 </div>
 
                 <AnimatePresence mode="wait">
                   <m.div
                     key={activeService.id}
-                    className="shrink-0 border-t border-espresso-900/8 px-5 py-4 sm:px-6"
+                    className="relative z-30 shrink-0 overflow-visible border-t border-espresso-900/8 px-5 py-4 sm:px-6"
                     variants={cardSwap}
                     initial="hidden"
                     animate="visible"
@@ -226,7 +239,11 @@ function DesktopStepper() {
                       {activeService.description}
                     </p>
                     <Benefits items={activeService.benefits} compact />
-                    <Cta service={activeService} compact />
+                    <ServicesBookButton
+                      serviceKey={activeService.key}
+                      menuAnchorRef={menuAnchorRef}
+                      className="mt-4"
+                    />
                   </m.div>
                 </AnimatePresence>
               </div>
@@ -310,6 +327,7 @@ function MobileStack() {
           <span className="absolute left-4 top-4 rounded-full bg-paper/95 px-3.5 py-1.5 text-xs font-semibold text-espresso-900 shadow-sm">
             {services[activeIndex].tag}
           </span>
+          <StartingPriceBadge serviceKey={services[activeIndex].key} />
           <div className="absolute bottom-4 left-1/2 flex -translate-x-1/2 items-center gap-1.5" aria-hidden="true">
             {services.map((_, i) => (
               <span

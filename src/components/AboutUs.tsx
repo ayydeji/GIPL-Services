@@ -18,21 +18,20 @@ export function AboutUs() {
       <div className="mx-auto w-full max-w-[1400px] section-space px-5 sm:px-8">
         <m.div
           ref={ref}
-          className="flex flex-col gap-10 sm:flex-row sm:gap-16"
+          className="flex min-w-0 flex-col gap-10 overflow-x-clip sm:flex-row sm:gap-16"
           variants={fadeUpStagger}
           initial="hidden"
           animate={state}
         >
-          <m.div className="sm:w-[30%] shrink-0" variants={splitFromLeft}>
+          <m.div className="min-w-0 sm:w-[30%] sm:shrink-0" variants={splitFromLeft}>
             <h2
               className="section-heading leading-none"
-              style={{ fontSize: "clamp(2rem, 4vw, 3.5rem)" }}
             >
               Our Story
             </h2>
           </m.div>
 
-          <m.div className="flex flex-col gap-10 sm:flex-1" variants={fadeUpStagger}>
+          <m.div className="flex min-w-0 flex-col gap-10 sm:flex-1" variants={fadeUpStagger}>
             <m.p
               className="font-medium leading-[1.35] tracking-[-0.01em] text-espresso-900 text-balance"
               style={{ fontSize: "clamp(1.05rem, 1.6vw, 1.35rem)" }}
