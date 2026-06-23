@@ -16,6 +16,10 @@ const FloorPlan3D = dynamic(() => import("@/components/FloorPlan3D"), {
   ),
 });
 
-export default function FloorPlanClient() {
-  return <FloorPlan3D />;
+type FloorPlanClientProps = {
+  staticCamera?: boolean;
+};
+
+export default function FloorPlanClient({ staticCamera }: FloorPlanClientProps) {
+  return <FloorPlan3D staticCamera={staticCamera} />;
 }

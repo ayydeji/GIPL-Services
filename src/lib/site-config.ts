@@ -1,19 +1,25 @@
 // Central configuration for site-wide content, contact details, and
 // external links. Edit values here to update copy across the whole site.
 
-/**
- * PLACEHOLDER — default EPC booking link (smallest tier).
- * Replace with the real Cal.com event URL before going live.
- * Full tier list: docs/pricing.md and `pricing` / `serviceBundles` below.
- */
-export const EPC_BOOKING_URL = "";
+export const CAL_USERNAME = "muhammad-kamal";
 
-/** PLACEHOLDER — paste Cal.com URL for the July 2026 Complete package promo (£200). */
-export const JULY_COMPLETE_PROMO_BOOKING_URL = "";
+/** Build a Cal.com booking URL from an event slug. */
+export function buildCalBookingUrl(slug: string): string {
+  return `https://cal.com/${CAL_USERNAME}/${slug}`;
+}
+
+/**
+ * Default EPC booking link (smallest tier).
+ */
+export const EPC_BOOKING_URL = buildCalBookingUrl("epc-up-to-100-m²");
+
+export const JULY_COMPLETE_PROMO_BOOKING_URL = buildCalBookingUrl(
+  "july-2026-intro-complete-package-up-to-100-m²",
+);
 
 export const calConsultationConfig = {
-  namespace: "15min",
-  calLink: "muhammad-kamal/15min",
+  namespace: "free-consultation",
+  calLink: `${CAL_USERNAME}/free-consultation`,
   buttonText: "Free consultation",
   buttonColor: "#3D3126",
   buttonTextColor: "#FAF8F5",
@@ -76,9 +82,9 @@ export const pricing: ServicePricing[] = [
     key: "epc",
     serviceName: "EPC Certificates",
     tiers: [
-      tier("Up to 100 m²", 65),
-      tier("101 – 150 m²", 75),
-      tier("151 – 200 m²", 85),
+      tier("Up to 100 m²", 65, buildCalBookingUrl("epc-up-to-100-m²")),
+      tier("101 – 150 m²", 75, buildCalBookingUrl("epc-101-150-m²")),
+      tier("151 – 200 m²", 85, buildCalBookingUrl("epc-151-200-m²")),
       {
         label: "Over 200 m²",
         pricePence: 0,
@@ -95,9 +101,9 @@ export const pricing: ServicePricing[] = [
     key: "floor-plans",
     serviceName: "Floor Plans",
     tiers: [
-      tier("Up to 100 m²", 85),
-      tier("101 – 150 m²", 90),
-      tier("151 – 200 m²", 95),
+      tier("Up to 100 m²", 85, buildCalBookingUrl("floor-plan-up-to-100-m²")),
+      tier("101 – 150 m²", 90, buildCalBookingUrl("floor-plan-101-150-m²")),
+      tier("151 – 200 m²", 95, buildCalBookingUrl("floor-plan-151-200-m²")),
       {
         label: "Over 200 m²",
         pricePence: 0,
@@ -115,9 +121,9 @@ export const pricing: ServicePricing[] = [
     key: "virtual-tours",
     serviceName: "3D Virtual Tours",
     tiers: [
-      tier("Up to 100 m²", 150),
-      tier("101 – 150 m²", 250),
-      tier("151 – 200 m²", 300),
+      tier("Up to 100 m²", 150, buildCalBookingUrl("3d-virtual-tour-up-to-100-m²")),
+      tier("101 – 150 m²", 250, buildCalBookingUrl("3d-virtual-tour-101-150-m²")),
+      tier("151 – 200 m²", 300, buildCalBookingUrl("3d-virtual-tour-151-200-m²")),
       {
         label: "Over 200 m²",
         pricePence: 0,
@@ -147,9 +153,9 @@ export const serviceBundles: BundlePricing[] = [
     includes: ["EPC", "Floor Plan"],
     discountPence: bundleDiscounts.essential,
     tiers: [
-      tier("Up to 100 m²", 130),
-      tier("101 – 150 m²", 145),
-      tier("151 – 200 m²", 160),
+      tier("Up to 100 m²", 130, buildCalBookingUrl("essential-package-up-to-100-m²")),
+      tier("101 – 150 m²", 145, buildCalBookingUrl("essential-package-101-150-m²")),
+      tier("151 – 200 m²", 160, buildCalBookingUrl("essential-package-151-200-m²")),
       {
         label: "Over 200 m²",
         pricePence: 0,
@@ -164,9 +170,9 @@ export const serviceBundles: BundlePricing[] = [
     includes: ["Floor Plan", "3D Virtual Tour"],
     discountPence: bundleDiscounts.marketing,
     tiers: [
-      tier("Up to 100 m²", 200),
-      tier("101 – 150 m²", 305),
-      tier("151 – 200 m²", 360),
+      tier("Up to 100 m²", 200, buildCalBookingUrl("marketing-package-up-to-100-m²")),
+      tier("101 – 150 m²", 305, buildCalBookingUrl("marketing-package-101-150-m²")),
+      tier("151 – 200 m²", 360, buildCalBookingUrl("marketing-package-151-200-m²")),
       {
         label: "Over 200 m²",
         pricePence: 0,
@@ -181,9 +187,9 @@ export const serviceBundles: BundlePricing[] = [
     includes: ["EPC", "Floor Plan", "3D Virtual Tour"],
     discountPence: bundleDiscounts.complete,
     tiers: [
-      tier("Up to 100 m²", 250),
-      tier("101 – 150 m²", 365),
-      tier("151 – 200 m²", 430),
+      tier("Up to 100 m²", 250, buildCalBookingUrl("complete-package-up-to-100-m²")),
+      tier("101 – 150 m²", 365, buildCalBookingUrl("complete-package-101-150-m²")),
+      tier("151 – 200 m²", 430, buildCalBookingUrl("complete-package-151-200-m²")),
       {
         label: "Over 200 m²",
         pricePence: 0,
@@ -435,7 +441,7 @@ export const EPC_BOOKING_FALLBACK_HREF = SERVICE_BOOKING_FALLBACK_HREF;
 export const EPC_OVER_200_LABEL = OVER_200_LABEL;
 
 export const siteConfig = {
-  companyLegalName: "Groove Park Investment Limited",
+  companyLegalName: "Grove Park Investment Limited",
   brandName: "GIPL Services",
   tagline: "EPC Certificates, 3D Virtual Tours & Floor Plans",
   phone: "07495 331 757",
@@ -548,6 +554,25 @@ export const services: {
     ctaHref: SERVICE_BOOKING_FALLBACK_HREF,
   },
 ];
+
+const INCLUDE_TO_VISUAL: Record<string, ServiceVisual> = {
+  EPC: "epc-ladder",
+  "Floor Plan": "floor-plan",
+  "3D Virtual Tour": "tour-room",
+};
+
+/** Maps bundle includes to homepage 3D visual keys for overlapping stack art. */
+export function bundleVisualKeys(bundleKey: BundleKey): ServiceVisual[] {
+  const bundle = serviceBundles.find((b) => b.key === bundleKey);
+  if (!bundle) return [];
+  return bundle.includes
+    .map((item) => INCLUDE_TO_VISUAL[item])
+    .filter((visual): visual is ServiceVisual => Boolean(visual));
+}
+
+export function getServiceByVisual(visual: ServiceVisual) {
+  return services.find((s) => s.visual === visual);
+}
 
 export type PersonaHighlight = {
   point: string;

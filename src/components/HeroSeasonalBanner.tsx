@@ -7,12 +7,8 @@ import {
   seasonalPromotionHref,
   type SeasonalPromotion,
 } from "@/lib/site-config";
-import { isConsultationHref, openConsultationBooking } from "@/lib/cal-consultation";
+import { isConsultationHref, openCalBooking, openConsultationBooking } from "@/lib/cal-consultation";
 import { heroHeadline } from "@/lib/motion";
-
-function promoIsExternal(href: string): boolean {
-  return href.startsWith("http");
-}
 
 export function HeroSeasonalBanner() {
   const [promo, setPromo] = useState<SeasonalPromotion | null>(null);
@@ -24,19 +20,20 @@ export function HeroSeasonalBanner() {
   if (!promo) return null;
 
   const href = seasonalPromotionHref(promo);
-  const external = promoIsExternal(href);
   const consultation = isConsultationHref(href);
+  const calBookingUrl = promo.calBookingUrl.trim();
+  const opensModal = consultation || Boolean(calBookingUrl);
 
   return (
     <m.a
-      href={consultation ? "#" : href}
-      target={external ? "_blank" : undefined}
-      rel={external ? "noopener noreferrer" : undefined}
+      href={opensModal ? "#" : href}
       onClick={
-        consultation
+        opensModal
           ? (event) => {
               event.preventDefault();
-              void openConsultationBooking();
+              void (calBookingUrl
+                ? openCalBooking(calBookingUrl)
+                : openConsultationBooking());
             }
           : undefined
       }

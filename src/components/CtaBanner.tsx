@@ -41,7 +41,7 @@ export function CtaBanner() {
             Let&apos;s get your EPC sorted this week.
           </m.h2>
           <m.div
-            className="mt-10 flex flex-wrap items-center justify-center gap-4"
+            className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
             variants={fadeUpItem}
           >
             <BookServiceButton serviceKey="epc" longLabel />

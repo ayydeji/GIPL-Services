@@ -26,11 +26,11 @@ export function Statement() {
             </p>
           </StaggerItem>
           <StaggerItem>
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-5">
+            <div className="mt-10 flex flex-col items-stretch gap-4 sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-5">
               <BookServiceButton serviceKey="epc" longLabel />
               <a
                 href="#contact"
-                className="text-sm font-medium text-espresso-900/70 underline-offset-4 transition-colors hover:text-espresso-900 hover:underline"
+                className="text-center text-sm font-medium text-espresso-900/70 underline-offset-4 transition-colors hover:text-espresso-900 hover:underline sm:text-left"
               >
                 Get in touch
               </a>

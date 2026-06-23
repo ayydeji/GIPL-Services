@@ -21,6 +21,7 @@ interface Props {
   active: ServiceVisual;
   fallbackSrc: string;
   fallbackAlt: string;
+  singleScene?: boolean;
 }
 
 export default function ServiceVisualClient(props: Props) {

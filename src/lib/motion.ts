@@ -178,6 +178,15 @@ export const heroCanvas: Variants = {
   },
 };
 
+/** Opacity-only — avoids a scale "jump" in fixed-height mobile hero layouts. */
+export const heroCanvasMobile: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: DURATION.hero, ease: EASE_ENTER, delay: 0.12 },
+  },
+};
+
 export const heroSubcopy: Variants = {
   hidden: { opacity: 0, y: 16 },
   visible: {
@@ -199,6 +208,56 @@ export const personaContentEnter: Variants = {
     y: -8,
     transition: { duration: DURATION.micro, ease: EASE_EXIT },
   },
+};
+
+export const wizardStepEnter: Variants = {
+  hidden: { opacity: 0, y: 16 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: DURATION.enter, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    y: -10,
+    transition: { duration: DURATION.exit, ease: EASE_EXIT },
+  },
+};
+
+export const wizardStepEnterReduced: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.25, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.2, ease: EASE_EXIT },
+  },
+};
+
+export const bundleLayerReveal: Variants = {
+  hidden: { opacity: 0 },
+  visible: (i: number) => ({
+    opacity: 1,
+    transition: {
+      duration: DURATION.micro,
+      ease: EASE_ENTER,
+      delay: i * 0.06,
+    },
+  }),
+};
+
+export const bundleLayerRevealReduced: Variants = {
+  hidden: { opacity: 0 },
+  visible: (i: number) => ({
+    opacity: 1,
+    transition: {
+      duration: 0.2,
+      ease: EASE_ENTER,
+      delay: i * 0.02,
+    },
+  }),
 };
 
 export const cardSwap: Variants = {

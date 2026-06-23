@@ -4,7 +4,11 @@ import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { useEffect, useId, useRef, useState, type RefObject } from "react";
 import { createPortal } from "react-dom";
 import { ServiceTierIllustration } from "@/components/ServiceTierIllustration";
-import { isConsultationHref, openConsultationBooking } from "@/lib/cal-consultation";
+import {
+  isConsultationHref,
+  openCalBooking,
+  openConsultationBooking,
+} from "@/lib/cal-consultation";
 import {
   OVER_200_LABEL,
   SERVICE_BOOKING_FALLBACK_HREF,
@@ -33,8 +37,9 @@ function tierHref(tier: ServiceBookingTier): string {
   return tier.calBookingUrl.trim() || SERVICE_BOOKING_FALLBACK_HREF;
 }
 
-function tierIsExternal(href: string): boolean {
-  return href.startsWith("http");
+function openTierBooking(tier: ServiceBookingTier): Promise<void> {
+  const bookingUrl = tier.calBookingUrl.trim();
+  return bookingUrl ? openCalBooking(bookingUrl) : openConsultationBooking();
 }
 
 function TierCell({
@@ -53,22 +58,20 @@ function TierCell({
   reducedMotion: boolean;
 }) {
   const href = tierHref(tier);
-  const external = tierIsExternal(href);
   const consultation = isConsultationHref(href);
+  const opensModal = consultation || Boolean(tier.calBookingUrl.trim());
   const itemVariants = reducedMotion ? epcTierItemReduced : epcTierItem;
 
   return (
     <m.li role="none" variants={itemVariants} className="min-w-0">
       <a
-        href={consultation ? "#" : href}
+        href={opensModal ? "#" : href}
         role="menuitem"
         data-index={index}
-        target={external ? "_blank" : undefined}
-        rel={external ? "noopener noreferrer" : undefined}
         onClick={(event) => {
-          if (consultation) {
+          if (opensModal) {
             event.preventDefault();
-            void openConsultationBooking().finally(onSelect);
+            void openTierBooking(tier).finally(onSelect);
             return;
           }
           onSelect();

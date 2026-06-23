@@ -123,6 +123,39 @@ details.faq-item[open] .faq-chevron {
   white-space: nowrap;
 }
 
+@media (max-width: 640px) {
+  cal-modal-box {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    z-index: 2147483647 !important;
+  }
+
+  cal-modal-box iframe.cal-embed {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  body.cal-modal-open {
+    overflow: hidden;
+  }
+
+  body.cal-modal-open header {
+    z-index: 1 !important;
+  }
+
+  body.mobile-menu-open .hero-epc-panel {
+    visibility: hidden;
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   *:not(cal-modal-box):not(cal-inline),
   *:not(cal-modal-box):not(cal-inline)::before,

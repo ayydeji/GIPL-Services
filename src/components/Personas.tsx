@@ -208,7 +208,7 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-espresso-800/55">
           Recommendations
         </p>
-        <div className="mt-5 flex flex-wrap gap-3">
+        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
           {persona.recommended.map((rec) => {
             if (isBookingRecommendation(rec)) {
               return (
@@ -224,7 +224,7 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
               <a
                 key={rec.label}
                 href={rec.href}
-                className="inline-flex w-fit items-center gap-2 rounded-full border border-espresso-900/15 px-6 py-3 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600"
+                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-espresso-900/15 px-6 py-3 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600 sm:inline-flex sm:w-fit"
               >
                 {rec.label}
                 <svg

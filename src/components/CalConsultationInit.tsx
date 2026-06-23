@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import {
   initConsultationCal,
   isConsultationHref,
+  observeCalModalMobileLayout,
   openConsultationBooking,
 } from "@/lib/cal-consultation";
 
@@ -11,6 +12,7 @@ import {
 export function CalConsultationInit() {
   useEffect(() => {
     void initConsultationCal();
+    const stopObservingModalLayout = observeCalModalMobileLayout();
 
     async function handleClick(event: MouseEvent) {
       const link = (event.target as Element | null)?.closest("a[href]");
@@ -22,7 +24,10 @@ export function CalConsultationInit() {
     }
 
     document.addEventListener("click", handleClick, true);
-    return () => document.removeEventListener("click", handleClick, true);
+    return () => {
+      document.removeEventListener("click", handleClick, true);
+      stopObservingModalLayout();
+    };
   }, []);
 
   return null;

@@ -1,8 +1,8 @@
 "use client";
 
 import { useCallback } from "react";
-import { calConsultationConfig } from "@/lib/site-config";
 import { openConsultationBooking } from "@/lib/cal-consultation";
+import { calConsultationConfig } from "@/lib/site-config";
 
 type FreeConsultationButtonProps = {
   className?: string;
@@ -22,7 +22,7 @@ export function FreeConsultationButton({
     <button
       type="button"
       onClick={onClick}
-      className={`inline-flex shrink-0 cursor-pointer items-center rounded-full border border-espresso-900/15 px-7 py-3.5 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600 ${className}`}
+      className={`flex w-full cursor-pointer items-center justify-center rounded-full border border-espresso-900/15 px-7 py-3.5 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600 sm:inline-flex sm:w-auto sm:shrink-0 ${className}`}
     >
       {calConsultationConfig.buttonText}
     </button>

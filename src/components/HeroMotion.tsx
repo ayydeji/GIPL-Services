@@ -1,14 +1,28 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { m } from "framer-motion";
 import { BookServiceButton } from "@/components/BookServiceButton";
 import { FreeConsultationButton } from "@/components/FreeConsultationButton";
 import { HeroSeasonalBanner } from "@/components/HeroSeasonalBanner";
 import { siteConfig } from "@/lib/site-config";
-import { heroCanvas, heroHeadline, heroSubcopy } from "@/lib/motion";
+import { heroCanvas, heroCanvasMobile, heroHeadline, heroSubcopy } from "@/lib/motion";
 import FloorPlanClient from "@/components/FloorPlanClient";
 
+const MOBILE_MQ = "(max-width: 767px)";
+
 export function HeroMotion() {
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(MOBILE_MQ).matches,
+  );
+
+  useEffect(() => {
+    const mq = window.matchMedia(MOBILE_MQ);
+    const update = () => setIsMobile(mq.matches);
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
+
   return (
     <>
       <div className="mx-auto w-full max-w-[1400px] px-5 pt-14 sm:px-8 sm:pt-16 shrink-0">
@@ -43,12 +57,12 @@ export function HeroMotion() {
 
       <div className="mx-auto mt-8 w-full max-w-[1400px] px-5 sm:px-8 flex-1 min-h-0">
         <m.div
-          className="relative w-full h-full overflow-hidden rounded-2xl"
-          variants={heroCanvas}
+          className="relative isolate z-0 w-full h-full overflow-hidden rounded-2xl"
+          variants={isMobile ? heroCanvasMobile : heroCanvas}
           initial="hidden"
           animate="visible"
         >
-          <FloorPlanClient />
+          <FloorPlanClient staticCamera />
         </m.div>
       </div>
 

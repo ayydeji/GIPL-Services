@@ -31,11 +31,27 @@ interface HoverState {
 }
 
 const MOBILE_MQ = "(max-width: 767px)";
+/** >1 zooms the orthographic camera out, making the model appear smaller. */
+const MOBILE_FRUSTUM_SCALE = 1.22;
 
-export default function FloorPlan3D() {
+function mobileFrustumScale(): number {
+  return typeof window !== "undefined" && window.matchMedia(MOBILE_MQ).matches
+    ? MOBILE_FRUSTUM_SCALE
+    : 1;
+}
+
+type FloorPlan3DProps = {
+  /** When true, the camera angle is fixed and only auto-rotation runs. */
+  staticCamera?: boolean;
+};
+
+export default function FloorPlan3D({ staticCamera = false }: FloorPlan3DProps) {
   const canvasWrapRef = useRef<HTMLDivElement>(null);
   const [hoverState, setHoverState] = useState<HoverState | null>(null);
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(MOBILE_MQ).matches,
+  );
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const mq = window.matchMedia(MOBILE_MQ);
@@ -45,9 +61,21 @@ export default function FloorPlan3D() {
     return () => mq.removeEventListener("change", update);
   }, []);
 
+  useEffect(() => {
+    const syncMenuOpen = () => {
+      setMobileMenuOpen(document.body.classList.contains("mobile-menu-open"));
+    };
+
+    syncMenuOpen();
+    const observer = new MutationObserver(syncMenuOpen);
+    observer.observe(document.body, { attributes: true, attributeFilter: ["class"] });
+    return () => observer.disconnect();
+  }, []);
+
   const buildScene = useCallback((container: HTMLDivElement) => {
     const W = container.clientWidth;
     const H = container.clientHeight;
+    if (W < 2 || H < 2) return undefined;
 
     const tok: TokMap = {
       paper:       readToken("--color-paper",       TOKENS.paper),
@@ -69,7 +97,7 @@ export default function FloorPlan3D() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.setSize(W, H);
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    renderer.shadowMap.type = THREE.PCFShadowMap;
     renderer.toneMapping = THREE.ACESFilmicToneMapping;
     renderer.toneMappingExposure = 1.1;
     container.appendChild(renderer.domElement);
@@ -80,7 +108,7 @@ export default function FloorPlan3D() {
     const planW = 9.0;
     const planD = 8.0 + 1.6;
     const aspect = W / H;
-    const frustumH = planD * 1.5;
+    const frustumH = planD * 1.5 * mobileFrustumScale();
     const frustumW = frustumH * aspect;
     const camera = new THREE.OrthographicCamera(
       -frustumW / 2, frustumW / 2,
@@ -127,6 +155,7 @@ export default function FloorPlan3D() {
     controls.dampingFactor = 0.08;
     controls.enablePan = false;
     controls.enableZoom = false;
+    controls.enableRotate = !staticCamera;
     controls.minZoom = 0.6;
     controls.maxZoom = 2.5;
     controls.maxPolarAngle = THREE.MathUtils.degToRad(75);
@@ -311,7 +340,7 @@ export default function FloorPlan3D() {
       const cw = container.clientWidth;
       const ch = container.clientHeight;
       const asp = cw / ch;
-      const fh = planD * 1.5;
+      const fh = planD * 1.5 * mobileFrustumScale();
       const fw = fh * asp;
       (camera as THREE.OrthographicCamera).left = -fw / 2;
       (camera as THREE.OrthographicCamera).right = fw / 2;
@@ -354,19 +383,36 @@ export default function FloorPlan3D() {
         container.removeChild(renderer.domElement);
       }
     };
-  }, []);
+  }, [staticCamera, isMobile]);
 
   useEffect(() => {
     const container = canvasWrapRef.current;
     if (!container) return;
-    const cleanup = buildScene(container);
-    return cleanup;
+
+    let cleanup: (() => void) | undefined;
+    let disposed = false;
+
+    const mount = () => {
+      if (disposed || cleanup) return;
+      const next = buildScene(container);
+      if (next) cleanup = next;
+    };
+
+    mount();
+    const ro = new ResizeObserver(mount);
+    ro.observe(container);
+
+    return () => {
+      disposed = true;
+      ro.disconnect();
+      cleanup?.();
+    };
   }, [buildScene]);
 
   return (
     <div className="flex h-full w-full flex-col">
       <div className="relative min-h-0 flex-1" ref={canvasWrapRef}>
-        {hoverState && (
+        {hoverState && !isMobile && (
           <svg
             className="pointer-events-none absolute inset-0 z-[15] h-full w-full"
             aria-hidden="true"
@@ -410,13 +456,13 @@ export default function FloorPlan3D() {
             <EpcPanel roomId={hoverState.roomId} />
           </div>
         )}
-      </div>
 
-      {isMobile && hoverState && (
-        <div className="pointer-events-none shrink-0 pt-3">
-          <EpcPanel roomId={hoverState.roomId} />
-        </div>
-      )}
+        {isMobile && hoverState && !mobileMenuOpen && (
+          <div className="hero-epc-panel pointer-events-none absolute inset-x-0 bottom-0 z-10 px-3 pb-3">
+            <EpcPanel roomId={hoverState.roomId} />
+          </div>
+        )}
+      </div>
     </div>
   );
 }

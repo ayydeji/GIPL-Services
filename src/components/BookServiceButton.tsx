@@ -3,7 +3,11 @@
 import { AnimatePresence, m, useReducedMotion } from "framer-motion";
 import { useEffect, useId, useRef, useState } from "react";
 import { ServiceTierIllustration } from "@/components/ServiceTierIllustration";
-import { isConsultationHref, openConsultationBooking } from "@/lib/cal-consultation";
+import {
+  isConsultationHref,
+  openCalBooking,
+  openConsultationBooking,
+} from "@/lib/cal-consultation";
 import {
   OVER_200_LABEL,
   SERVICE_BOOKING_FALLBACK_HREF,
@@ -43,8 +47,9 @@ function tierHref(tier: ServiceBookingTier): string {
   return tier.calBookingUrl.trim() || SERVICE_BOOKING_FALLBACK_HREF;
 }
 
-function tierIsExternal(href: string): boolean {
-  return href.startsWith("http");
+function openTierBooking(tier: ServiceBookingTier): Promise<void> {
+  const bookingUrl = tier.calBookingUrl.trim();
+  return bookingUrl ? openCalBooking(bookingUrl) : openConsultationBooking();
 }
 
 function TierCell({
@@ -63,22 +68,20 @@ function TierCell({
   reducedMotion: boolean;
 }) {
   const href = tierHref(tier);
-  const external = tierIsExternal(href);
   const consultation = isConsultationHref(href);
+  const opensModal = consultation || Boolean(tier.calBookingUrl.trim());
   const itemVariants = reducedMotion ? epcTierItemReduced : epcTierItem;
 
   return (
     <m.li role="none" variants={itemVariants} className="min-w-0 sm:w-[8.75rem]">
       <a
-        href={consultation ? "#" : href}
+        href={opensModal ? "#" : href}
         role="menuitem"
         data-index={index}
-        target={external ? "_blank" : undefined}
-        rel={external ? "noopener noreferrer" : undefined}
         onClick={(event) => {
-          if (consultation) {
+          if (opensModal) {
             event.preventDefault();
-            void openConsultationBooking().finally(onSelect);
+            void openTierBooking(tier).finally(onSelect);
             return;
           }
           onSelect();
@@ -226,11 +229,21 @@ export function BookServiceButton({
       : "border border-espresso-900/15 text-espresso-900 hover:border-bronze-500/60 hover:text-bronze-600";
 
   const sizeClass = compact ? "px-6 py-2.5" : "px-7 py-3.5";
+  const wrapperWidthClass = fullWidth
+    ? "w-full"
+    : compact
+      ? "shrink-0"
+      : "w-full sm:w-auto";
+  const triggerLayoutClass = fullWidth
+    ? "flex w-full justify-center"
+    : compact
+      ? "inline-flex shrink-0"
+      : "flex w-full justify-center sm:inline-flex sm:w-auto sm:shrink-0";
 
   return (
     <div
       ref={rootRef}
-      className={`relative shrink-0 ${fullWidth ? "w-full" : ""} ${className}`}
+      className={`relative ${wrapperWidthClass} ${className}`}
     >
       <button
         ref={triggerRef}
@@ -240,7 +253,7 @@ export function BookServiceButton({
         aria-expanded={open}
         aria-controls={open ? menuId : undefined}
         onClick={toggleOpen}
-        className={`${fullWidth ? "flex w-full justify-center" : "inline-flex shrink-0"} cursor-pointer items-center gap-2 rounded-full text-sm font-semibold transition-colors ${sizeClass} ${triggerClass} ${
+        className={`${triggerLayoutClass} cursor-pointer items-center gap-2 rounded-full text-sm font-semibold transition-colors ${sizeClass} ${triggerClass} ${
           open && variant === "primary" ? "ring-1 ring-bronze-500/30" : ""
         }`}
       >
@@ -279,14 +292,14 @@ export function BookServiceButton({
           >
             {!expandInline && (
               <>
-            <div
-              className={`absolute -top-1.5 h-0 w-0 border-x-[6px] border-b-[6px] border-x-transparent border-b-paper ${caretAlignClass}`}
-              aria-hidden="true"
-            />
-            <div
-              className={`absolute -top-[7px] h-0 w-0 border-x-[6px] border-b-[6px] border-x-transparent border-b-espresso-900/10 ${caretAlignClass}`}
-              aria-hidden="true"
-            />
+                <div
+                  className={`absolute -top-1.5 h-0 w-0 border-x-[6px] border-b-[6px] border-x-transparent border-b-paper ${caretAlignClass}`}
+                  aria-hidden="true"
+                />
+                <div
+                  className={`absolute -top-[7px] h-0 w-0 border-x-[6px] border-b-[6px] border-x-transparent border-b-espresso-900/10 ${caretAlignClass}`}
+                  aria-hidden="true"
+                />
               </>
             )}
 

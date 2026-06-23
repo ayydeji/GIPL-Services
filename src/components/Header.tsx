@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, m } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { BookServiceButton } from "@/components/BookServiceButton";
 import { FreeConsultationButton } from "@/components/FreeConsultationButton";
 import { navLinks } from "@/lib/site-config";
@@ -14,6 +14,11 @@ import {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    document.body.classList.toggle("mobile-menu-open", open);
+    return () => document.body.classList.remove("mobile-menu-open");
+  }, [open]);
 
   return (
     <m.header
@@ -41,7 +46,7 @@ export function Header() {
             aria-label="Toggle menu"
             aria-expanded={open}
             onClick={() => setOpen((v) => !v)}
-            className="flex sm:hidden flex-col justify-center items-center gap-[5px] w-8 h-8"
+            className="flex sm:hidden flex-col justify-center items-center gap-[5px] w-8 h-8 cursor-pointer"
           >
             <m.span
               className="block h-px w-5 bg-espresso-900 origin-center"
@@ -66,7 +71,7 @@ export function Header() {
         {open && (
           <m.div
             key="mobile-menu"
-            className="sm:hidden max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t bg-paper"
+            className="sm:hidden relative isolate z-[60] max-h-[calc(100dvh-3.5rem)] overflow-y-auto border-t bg-paper"
             variants={mobileMenuPanel}
             initial="hidden"
             animate="visible"
