@@ -81,7 +81,7 @@ function PackageCardView({ card }: { card: PackageCard }) {
           bundleKey={card.bundleKey}
           longLabel
           fullWidth
-          menuAlign="left"
+          expandInline
           variant={highlighted ? "primary" : "outline"}
         />
       </div>

@@ -163,6 +163,7 @@ function PersonaContent({ persona }: { persona: Persona }) {
                   serviceKey={rec.serviceKey}
                   variant="outline"
                   compact
+                  menuAlign="left"
                 />
               );
             }

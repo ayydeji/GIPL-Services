@@ -129,7 +129,7 @@ export function Footer() {
         animate={wordmarkAnimate}
       >
         <p className="footer-wordmark select-none text-left font-bold tracking-[-0.05em] text-espresso-900/20">
-          GIPL
+          GIPL Services
         </p>
       </m.div>
     </m.footer>
