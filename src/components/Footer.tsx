@@ -33,14 +33,14 @@ export function Footer() {
     >
       <div className="mx-auto max-w-[1400px] px-5 pt-[clamp(5rem,7vw,7.5rem)] pb-4 sm:px-8 sm:pb-6">
         <m.div
-          className="grid justify-items-center gap-12 text-center sm:grid-cols-2 lg:grid-cols-4"
+          className="grid gap-12 text-left sm:grid-cols-2 lg:grid-cols-4"
           variants={fadeUpStagger}
         >
           <m.div variants={fadeUpItem}>
             <span className="text-xl font-bold tracking-[-0.02em] text-espresso-900">
               GIPL <span className="text-bronze-600">Services</span>
             </span>
-            <p className="mx-auto mt-5 max-w-xs text-sm leading-relaxed text-espresso-900/55">
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-espresso-900/55">
               {siteConfig.companyLegalName} — professional property marketing
               for landlords, agents, and homeowners across{" "}
               {siteConfig.serviceArea}.
@@ -110,7 +110,7 @@ export function Footer() {
         </m.div>
 
         <m.div
-          className="mt-16 flex flex-col items-center gap-3 border-t border-espresso-900/10 pt-8 text-center text-xs text-espresso-900/40"
+          className="mt-16 flex flex-col items-start gap-3 border-t border-espresso-900/10 pt-8 text-left text-xs text-espresso-900/40"
           variants={fadeUpItem}
         >
           <p>
@@ -128,7 +128,7 @@ export function Footer() {
         initial="hidden"
         animate={wordmarkAnimate}
       >
-        <p className="footer-wordmark select-none text-center font-bold tracking-[-0.05em] text-espresso-900/20">
+        <p className="footer-wordmark select-none text-left font-bold tracking-[-0.05em] text-espresso-900/20">
           GIPL Services
         </p>
       </m.div>

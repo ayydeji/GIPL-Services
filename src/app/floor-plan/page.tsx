@@ -13,7 +13,7 @@ export default function FloorPlanPage() {
       className="min-h-screen"
       style={{ background: "var(--color-paper)", color: "var(--color-ink)" }}
     >
-      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pt-16 pb-20">
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8 pt-16 sm:pt-10 pb-20">
 
         {/* Eyebrow */}
         <p

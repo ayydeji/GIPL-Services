@@ -35,17 +35,21 @@ export function CtaBanner() {
             Ready when you are
           </m.p>
           <m.h2
-            className="section-heading mt-5 max-w-[16ch] leading-[0.98]"
+            className="mt-5 max-w-[16ch] text-[clamp(1.6rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.02em] text-espresso-900"
             variants={fadeUpItem}
           >
-            Let&apos;s get your EPC sorted this week.
+            Let&apos;s get your{" "}
+            <span className="box-decoration-clone bg-green-200 px-1.5 text-espresso-900">
+              EPC
+            </span>{" "}
+            sorted this week.
           </m.h2>
           <m.div
             className="mt-10 flex w-full max-w-sm flex-col items-stretch gap-3 sm:max-w-none sm:flex-row sm:flex-wrap sm:items-center sm:justify-center sm:gap-4"
             variants={fadeUpItem}
           >
             <BookServiceButton serviceKey="epc" longLabel />
-            <FreeConsultationButton className="border-espresso-900/20 bg-paper/60 hover:border-espresso-900/35 hover:bg-paper" />
+            <FreeConsultationButton />
           </m.div>
         </m.div>
       </m.div>

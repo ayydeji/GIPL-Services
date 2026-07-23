@@ -36,6 +36,7 @@ export type BookServiceButtonProps = {
   fullWidth?: boolean;
   menuAlign?: "left" | "right";
   expandInline?: boolean;
+  size?: "sm" | "lg";
   onTierSelect?: () => void;
   className?: string;
 } & (
@@ -120,6 +121,7 @@ export function BookServiceButton({
   fullWidth = false,
   menuAlign = "right",
   expandInline = false,
+  size = "sm",
   onTierSelect,
   className = "",
 }: BookServiceButtonProps) {
@@ -225,10 +227,11 @@ export function BookServiceButton({
 
   const triggerClass =
     variant === "primary"
-      ? "bg-espresso-900 text-paper hover:bg-espresso-800"
-      : "border border-espresso-900/15 text-espresso-900 hover:border-bronze-500/60 hover:text-bronze-600";
+      ? "text-espresso-900 hover:text-bronze-600"
+      : "text-espresso-900/70 hover:text-espresso-900";
 
-  const sizeClass = compact ? "px-6 py-2.5" : "px-7 py-3.5";
+  const sizeClass = size === "lg" ? "text-base" : "text-sm";
+
   const wrapperWidthClass = fullWidth
     ? "w-full"
     : compact
@@ -253,9 +256,7 @@ export function BookServiceButton({
         aria-expanded={open}
         aria-controls={open ? menuId : undefined}
         onClick={toggleOpen}
-        className={`${triggerLayoutClass} cursor-pointer items-center gap-2 rounded-full text-sm font-semibold transition-colors ${sizeClass} ${triggerClass} ${
-          open && variant === "primary" ? "ring-1 ring-bronze-500/30" : ""
-        }`}
+        className={`${triggerLayoutClass} cursor-pointer items-center gap-2 font-semibold transition-colors ${sizeClass} ${triggerClass}`}
       >
         {label}
         <svg

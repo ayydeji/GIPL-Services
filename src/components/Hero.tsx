@@ -4,7 +4,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="bg-paper flex flex-col min-h-[560px] h-svh md:h-dvh"
+      className="bg-paper flex flex-col"
     >
       <HeroMotion />
     </section>

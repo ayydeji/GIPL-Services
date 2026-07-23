@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import { Header } from "@/components/Header";
+import { Sidebar } from "@/components/Sidebar";
+import { TopBar } from "@/components/TopBar";
 import { CalConsultationInit } from "@/components/CalConsultationInit";
 import { MotionProvider } from "@/components/motion/MotionProvider";
 
@@ -90,8 +91,11 @@ export default function RootLayout({
       </head>
       <body className="min-h-screen bg-paper text-ink antialiased font-sans">
         <MotionProvider>
-          <Header />
-          {children}
+          <Sidebar />
+          <div className="sm:pl-[var(--sidebar-w)]">
+            <TopBar />
+            {children}
+          </div>
           <CalConsultationInit />
         </MotionProvider>
       </body>

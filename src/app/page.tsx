@@ -1,5 +1,4 @@
 import { Hero } from "@/components/Hero";
-import { AboutUs } from "@/components/AboutUs";
 import { Services } from "@/components/Services";
 import { Packages } from "@/components/Packages";
 import { TrustStrip } from "@/components/TrustStrip";
@@ -14,9 +13,8 @@ export default function Home() {
       <main className="overflow-x-clip">
         <Hero />
         <TrustStrip />
-        <Personas />
         <Services />
-        <AboutUs />
+        <Personas />
         <Packages />
         <Faq />
         <CtaBanner />

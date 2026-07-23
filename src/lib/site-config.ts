@@ -502,8 +502,7 @@ export const services: {
     name: "EPC Certificates",
     shortName: "EPC",
     tag: "Compliance",
-    image:
-      "https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/EPC Certificate D114 House Page 1.png",
     visual: "epc-ladder",
     description:
       "Accredited Energy Performance Certificates carried out quickly and correctly — keeping you on the right side of the law.",
@@ -540,8 +539,7 @@ export const services: {
     name: "Floor Plans",
     shortName: "Floor Plans",
     tag: "Layout",
-    image:
-      "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80",
+    image: "/images/Home Floor Plan UK.jpg",
     visual: "floor-plan",
     description:
       "Accurate, professionally drawn floor plans that help buyers and tenants understand a property's layout at a glance.",
@@ -585,6 +583,7 @@ export type PersonaRecommendation =
 
 export type Persona = {
   number: string;
+  slug: string;
   title: string;
   selectLabel: string;
   intro: string;
@@ -595,6 +594,7 @@ export type Persona = {
 export const personas: Persona[] = [
   {
     number: "01",
+    slug: "estate-agents",
     title: "Estate Agents",
     selectLabel: "Estate Agent",
     intro:
@@ -624,6 +624,7 @@ export const personas: Persona[] = [
   },
   {
     number: "02",
+    slug: "landlords",
     title: "Landlords",
     selectLabel: "Landlord",
     intro:
@@ -657,6 +658,7 @@ export const personas: Persona[] = [
   },
   {
     number: "03",
+    slug: "building-managers",
     title: "Building Managers",
     selectLabel: "Building Manager",
     intro:
@@ -742,4 +744,38 @@ export const faqs: Faq[] = [
     answer:
       "Properties over 200 m² fall outside our standard online tiers. Book a free consultation with the address and approximate floor area — we'll confirm tailored pricing for EPC, floor plan, 3D tour, or package work.",
   },
+];
+
+export type NavItem = {
+  label: string;
+  href: string;
+  children?: { label: string; href: string }[];
+};
+
+/** Sidebar nav tree — parent items with indentable sub-items, sourced from the same data as the rest of the site. */
+export const navTree: NavItem[] = [
+  { label: "About", href: "#home" },
+  {
+    label: "Services",
+    href: "#services",
+    children: services.map((s) => ({ label: s.name, href: `#${s.id}` })),
+  },
+  {
+    label: "Who it's for",
+    href: "#who",
+    children: personas.map((p) => ({
+      label: p.title,
+      href: `#who-${p.slug}`,
+    })),
+  },
+  {
+    label: "Packages",
+    href: "#packages",
+    children: serviceBundles.map((b) => ({
+      label: b.name,
+      href: `#package-${b.key}`,
+    })),
+  },
+  { label: "FAQ", href: "#faq" },
+  { label: "Contact", href: "#contact" },
 ];

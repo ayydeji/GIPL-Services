@@ -38,7 +38,8 @@ function PackageCardView({ card }: { card: PackageCard }) {
 
   return (
     <article
-      className={`flex h-full flex-col rounded-[1.75rem] border bg-surface p-6 sm:p-7 ${
+      id={`package-${card.bundleKey}`}
+      className={`flex h-full scroll-mt-24 flex-col border bg-surface p-6 sm:p-7 ${
         highlighted
           ? "border-bronze-500 shadow-[0_0_0_1px_rgba(179,139,93,0.35)]"
           : "border-espresso-900/10"
@@ -119,19 +120,20 @@ export function Packages() {
     <section
       ref={ref}
       id="packages"
-      className="relative overflow-hidden section-space scroll-mt-14 bg-paper sm:scroll-mt-16"
+      className="relative overflow-hidden section-space scroll-mt-14 bg-paper sm:scroll-mt-8"
     >
       <div className="relative mx-auto max-w-[1400px] px-5 sm:px-8">
         <m.div
-          className="mx-auto max-w-3xl text-center"
+          className="max-w-3xl"
           style={{ y: headerY, opacity: headerOpacity }}
         >
-          <h2
-            className="section-heading text-balance"
-          >
-            Bundle and save on every visit.
+          <h2 className="text-[clamp(1.6rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.02em] text-espresso-900">
+            <span className="box-decoration-clone bg-green-200 px-1.5 text-espresso-900">
+              Bundle
+            </span>{" "}
+            and save on every visit
           </h2>
-          <p className="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-espresso-900/60">
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-espresso-900/60">
             Combine the services you need into one appointment. Same floor-area
             bands as individual bookings — with a fixed discount on every tier.
           </p>

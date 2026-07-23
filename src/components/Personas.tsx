@@ -1,8 +1,19 @@
 "use client";
 
-import { AnimatePresence, m } from "framer-motion";
-import { useEffect, useId, useRef, useState } from "react";
-import { personas, type PersonaRecommendation, type ServiceKey } from "@/lib/site-config";
+import {
+  AnimatePresence,
+  m,
+  useMotionValueEvent,
+  useReducedMotion,
+  useScroll,
+} from "framer-motion";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  personas,
+  type Persona,
+  type PersonaRecommendation,
+  type ServiceKey,
+} from "@/lib/site-config";
 import { BookServiceButton } from "@/components/BookServiceButton";
 import {
   fadeUpItem,
@@ -12,160 +23,14 @@ import {
 } from "@/lib/motion";
 import { useScrollReveal } from "@/lib/use-scroll-reveal";
 
-const DEFAULT_PERSONA_INDEX = personas.findIndex((p) => p.selectLabel === "Landlord");
-const selectSize = "clamp(1.35rem, 2.6vw, 2.35rem)";
+const DESKTOP_QUERY = "(min-width: 1024px)";
 
-function PersonaSelect({
-  selectedIndex,
-  onChange,
-}: {
-  selectedIndex: number;
-  onChange: (index: number) => void;
-}) {
-  const [open, setOpen] = useState(false);
-  const [keyboardIndex, setKeyboardIndex] = useState(selectedIndex);
-  const rootRef = useRef<HTMLDivElement>(null);
-  const listRef = useRef<HTMLUListElement>(null);
-  const listboxId = useId();
-  const activeIndex = open ? keyboardIndex : selectedIndex;
-
-  function toggleOpen() {
-    setOpen((wasOpen) => {
-      if (!wasOpen) setKeyboardIndex(selectedIndex);
-      return !wasOpen;
-    });
-  }
-
-  useEffect(() => {
-    if (!open) return;
-
-    function handlePointerDown(event: MouseEvent) {
-      if (!rootRef.current?.contains(event.target as Node)) {
-        setOpen(false);
-      }
-    }
-
-    function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpen(false);
-        return;
-      }
-
-      if (!open) return;
-
-      switch (event.key) {
-        case "ArrowDown":
-          event.preventDefault();
-          setKeyboardIndex((i) => (i + 1) % personas.length);
-          break;
-        case "ArrowUp":
-          event.preventDefault();
-          setKeyboardIndex((i) => (i - 1 + personas.length) % personas.length);
-          break;
-        case "Home":
-          event.preventDefault();
-          setKeyboardIndex(0);
-          break;
-        case "End":
-          event.preventDefault();
-          setKeyboardIndex(personas.length - 1);
-          break;
-        case "Enter":
-        case " ":
-          event.preventDefault();
-          onChange(activeIndex);
-          setOpen(false);
-          break;
-      }
-    }
-
-    document.addEventListener("mousedown", handlePointerDown);
-    document.addEventListener("keydown", handleKeyDown);
-    return () => {
-      document.removeEventListener("mousedown", handlePointerDown);
-      document.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [open, activeIndex, onChange]);
-
-  useEffect(() => {
-    if (!open) return;
-    const option = listRef.current?.querySelector<HTMLElement>(
-      `[data-index="${activeIndex}"]`,
-    );
-    option?.scrollIntoView({ block: "nearest" });
-  }, [open, activeIndex]);
-
-  function select(index: number) {
-    onChange(index);
-    setKeyboardIndex(index);
-    setOpen(false);
-  }
-
-  return (
-    <div ref={rootRef} className="relative w-fit max-w-full">
-      <button
-        type="button"
-        id="persona-select"
-        aria-haspopup="listbox"
-        aria-expanded={open}
-        aria-controls={listboxId}
-        onClick={toggleOpen}
-        className="inline-flex max-w-full cursor-pointer items-center gap-2.5 rounded-full border border-espresso-900/20 bg-surface px-5 py-3 font-medium leading-normal tracking-[-0.02em] text-ink whitespace-nowrap transition-colors hover:border-espresso-900/35"
-        style={{ fontSize: selectSize }}
-      >
-        <span>{personas[selectedIndex].selectLabel}</span>
-        <svg
-          className={`shrink-0 text-espresso-900/45 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          aria-hidden="true"
-        >
-          <path
-            d="M6 9L12 15L18 9"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      </button>
-
-      {open && (
-        <ul
-          ref={listRef}
-          id={listboxId}
-          role="listbox"
-          aria-labelledby="persona-select"
-          className="absolute top-[calc(100%+0.5rem)] left-0 z-20 w-full min-w-[12rem] overflow-hidden rounded-2xl border border-espresso-900/10 bg-paper py-1.5 shadow-card"
-        >
-          {personas.map((p, i) => {
-            const isSelected = i === selectedIndex;
-            const isActive = i === activeIndex;
-            return (
-              <li
-                key={p.number}
-                role="option"
-                aria-selected={isSelected}
-                data-index={i}
-                onMouseEnter={() => setKeyboardIndex(i)}
-                onClick={() => select(i)}
-                className={`cursor-pointer px-5 py-2.5 text-base transition-colors ${
-                  isActive
-                    ? "bg-surface text-espresso-900"
-                    : "text-espresso-900/70 hover:bg-surface/80 hover:text-espresso-900"
-                } ${isSelected ? "font-semibold" : "font-normal"}`}
-              >
-                {p.selectLabel}
-              </li>
-            );
-          })}
-        </ul>
-      )}
-    </div>
-  );
-}
+// Display order differs from the data array (Estate Agent → Landlord → Building
+// Manager); we walk Landlord → Estate Agent → Building Manager.
+const PERSONA_ORDER = ["landlords", "estate-agents", "building-managers"];
+const orderedPersonas = PERSONA_ORDER.map((slug) =>
+  personas.find((p) => p.slug === slug),
+).filter(Boolean) as Persona[];
 
 function isBookingRecommendation(
   rec: PersonaRecommendation,
@@ -173,11 +38,92 @@ function isBookingRecommendation(
   return "serviceKey" in rec;
 }
 
-function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
+// ---------------------------------------------------------------------------
+// Segmented pill switcher
+// ---------------------------------------------------------------------------
+
+function PersonaSwitcher({
+  orderIndex,
+  onSelect,
+}: {
+  orderIndex: number;
+  onSelect: (index: number) => void;
+}) {
+  const reduceMotion = useReducedMotion() ?? false;
+
+  function handleKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+    if (event.key === "ArrowRight" || event.key === "ArrowDown") {
+      event.preventDefault();
+      onSelect((orderIndex + 1) % orderedPersonas.length);
+    } else if (event.key === "ArrowLeft" || event.key === "ArrowUp") {
+      event.preventDefault();
+      onSelect(
+        (orderIndex - 1 + orderedPersonas.length) % orderedPersonas.length,
+      );
+    } else if (event.key === "Home") {
+      event.preventDefault();
+      onSelect(0);
+    } else if (event.key === "End") {
+      event.preventDefault();
+      onSelect(orderedPersonas.length - 1);
+    }
+  }
+
+  return (
+    <div
+      role="tablist"
+      aria-label="Who we help"
+      onKeyDown={handleKeyDown}
+      className="inline-flex max-w-full flex-wrap gap-1 border border-espresso-900/15 bg-surface p-1"
+    >
+      {orderedPersonas.map((p, i) => {
+        const isActive = i === orderIndex;
+        return (
+          <button
+            key={p.number}
+            type="button"
+            role="tab"
+            aria-selected={isActive}
+            tabIndex={isActive ? 0 : -1}
+            onClick={() => onSelect(i)}
+            className={`relative cursor-pointer px-4 py-2.5 text-sm font-medium tracking-[-0.01em] transition-colors sm:px-6 sm:text-base ${
+              isActive
+                ? "text-espresso-900"
+                : "text-espresso-900/55 hover:text-espresso-900/80"
+            }`}
+          >
+            {isActive && (
+              <m.span
+                aria-hidden="true"
+                layoutId="persona-pill"
+                layout={!reduceMotion}
+                transition={
+                  reduceMotion
+                    ? { duration: 0 }
+                    : { type: "spring", stiffness: 380, damping: 34 }
+                }
+                className="absolute inset-0 bg-green-200"
+              />
+            )}
+            <span className="relative z-10 whitespace-nowrap">
+              {p.selectLabel}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Description body (unchanged content, swaps per active role)
+// ---------------------------------------------------------------------------
+
+function PersonaContent({ persona }: { persona: Persona }) {
   return (
     <>
       <m.p
-        className="text-lg leading-relaxed text-espresso-900/70"
+        className="max-w-2xl text-lg leading-relaxed text-espresso-900/70"
         variants={fadeUpItem}
       >
         {persona.intro}
@@ -187,7 +133,7 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
         {persona.highlights.map((item) => (
           <m.li
             key={item.point}
-            className="flex items-start gap-3.5 text-base leading-relaxed text-espresso-900/65"
+            className="flex max-w-2xl items-start gap-3.5 text-base leading-relaxed text-espresso-900/65"
             variants={fadeUpItem}
           >
             <span
@@ -208,7 +154,7 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
         <p className="text-xs font-semibold uppercase tracking-[0.16em] text-espresso-800/55">
           Recommendations
         </p>
-        <div className="mt-5 flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+        <div className="mt-5 flex flex-wrap gap-3">
           {persona.recommended.map((rec) => {
             if (isBookingRecommendation(rec)) {
               return (
@@ -216,6 +162,7 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
                   key={rec.label}
                   serviceKey={rec.serviceKey}
                   variant="outline"
+                  compact
                 />
               );
             }
@@ -224,7 +171,7 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
               <a
                 key={rec.label}
                 href={rec.href}
-                className="inline-flex w-full items-center justify-center gap-2 rounded-full border border-espresso-900/15 px-6 py-3 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600 sm:inline-flex sm:w-fit"
+                className="inline-flex w-fit items-center justify-center gap-2 rounded-full border border-espresso-900/15 px-6 py-3 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600"
               >
                 {rec.label}
                 <svg
@@ -251,39 +198,133 @@ function PersonaContent({ persona }: { persona: (typeof personas)[number] }) {
   );
 }
 
+// ---------------------------------------------------------------------------
+// Main export — sticky scroll on desktop, tap-to-switch on mobile
+// ---------------------------------------------------------------------------
+
 export function Personas() {
-  const { ref, state } = useScrollReveal<HTMLDivElement>();
-  const [selectedIndex, setSelectedIndex] = useState(
-    DEFAULT_PERSONA_INDEX >= 0 ? DEFAULT_PERSONA_INDEX : 0,
+  const { ref: revealRef, state } = useScrollReveal<HTMLDivElement>();
+  const sectionRef = useRef<HTMLElement>(null);
+  const [orderIndex, setOrderIndex] = useState(0);
+  const isDesktopRef = useRef(false);
+
+  const persona = orderedPersonas[orderIndex];
+  const total = orderedPersonas.length;
+
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start start", "end end"],
+  });
+
+  // Track desktop viewport so scroll-driving only runs where the frame pins.
+  useEffect(() => {
+    const mql = window.matchMedia(DESKTOP_QUERY);
+    const update = () => {
+      isDesktopRef.current = mql.matches;
+    };
+    update();
+    mql.addEventListener("change", update);
+    return () => mql.removeEventListener("change", update);
+  }, []);
+
+  // Scroll progress → active role (desktop only).
+  useMotionValueEvent(scrollYProgress, "change", (value) => {
+    if (!isDesktopRef.current) return;
+    const next = Math.min(total - 1, Math.max(0, Math.floor(value * total)));
+    setOrderIndex((current) => (current === next ? current : next));
+  });
+
+  // Scroll the window so a given role's segment is centred within the track.
+  const scrollToSegment = useCallback(
+    (index: number) => {
+      const section = sectionRef.current;
+      if (!section) return;
+      const sectionTop = section.getBoundingClientRect().top + window.scrollY;
+      const scrollRange = section.offsetHeight - window.innerHeight;
+      const target = sectionTop + ((index + 0.5) / total) * scrollRange;
+      window.scrollTo({ top: target, behavior: "smooth" });
+    },
+    [total],
   );
-  const persona = personas[selectedIndex];
+
+  const handleSelect = useCallback(
+    (index: number) => {
+      if (isDesktopRef.current) {
+        scrollToSegment(index);
+      } else {
+        setOrderIndex(index);
+      }
+    },
+    [scrollToSegment],
+  );
+
+  // Deep links: #who-<slug> selects that role (and scrolls into view).
+  useEffect(() => {
+    function applyHash() {
+      const hash = window.location.hash.replace(/^#/, "");
+      if (!hash.startsWith("who-")) return;
+      const slug = hash.slice("who-".length);
+      const index = orderedPersonas.findIndex((p) => p.slug === slug);
+      if (index === -1) return;
+
+      if (isDesktopRef.current) {
+        setOrderIndex(index);
+        // Wait a frame so layout is settled before measuring the track.
+        requestAnimationFrame(() => scrollToSegment(index));
+      } else {
+        setOrderIndex(index);
+        document
+          .getElementById("who")
+          ?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+
+    applyHash();
+    window.addEventListener("hashchange", applyHash);
+    return () => window.removeEventListener("hashchange", applyHash);
+  }, [scrollToSegment]);
 
   return (
     <section
+      ref={sectionRef}
       id="who"
-      className="bg-paper pt-[clamp(5rem,7vw,7.5rem)] pb-[clamp(6.5rem,10vw,10rem)]"
+      className="relative bg-paper py-[clamp(5rem,7vw,7.5rem)] lg:h-[300vh] lg:py-0"
     >
-      <div className="mx-auto max-w-[1400px] overflow-x-clip px-5 sm:px-8">
-        <m.div
-          ref={ref}
-          className="grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1.35fr)] lg:gap-16 xl:gap-24"
-          variants={fadeUpStagger}
-          initial="hidden"
-          animate={state}
-        >
-          <m.div className="lg:pt-1" variants={splitFromLeft}>
-            <h2
-              className="section-heading flex flex-wrap items-center gap-x-3 gap-y-2 leading-[1.1]"
-            >
-              <span className="shrink-0">I am a</span>
-              <PersonaSelect
-                selectedIndex={selectedIndex}
-                onChange={setSelectedIndex}
-              />
-            </h2>
+      <div className="lg:sticky lg:top-0 lg:flex lg:h-screen lg:items-center">
+        <div className="mx-auto w-full max-w-[1400px] px-5 sm:px-8">
+          <m.div
+            ref={revealRef}
+            variants={fadeUpStagger}
+            initial="hidden"
+            animate={state}
+          >
+            <m.div variants={splitFromLeft}>
+              <div className="flex items-start justify-between gap-4">
+                <h2 className="text-[clamp(1.6rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.02em] text-espresso-900">
+                  Who we{" "}
+                  <span className="box-decoration-clone bg-green-200 px-1.5 text-espresso-900">
+                    help
+                  </span>
+                </h2>
+                <span
+                  aria-hidden="true"
+                  className="mt-1 hidden shrink-0 text-sm font-semibold tracking-[0.14em] text-espresso-900/35 lg:block"
+                >
+                  {String(orderIndex + 1).padStart(2, "0")} /{" "}
+                  {String(total).padStart(2, "0")}
+                </span>
+              </div>
+
+              <div className="mt-7">
+                <PersonaSwitcher
+                  orderIndex={orderIndex}
+                  onSelect={handleSelect}
+                />
+              </div>
+            </m.div>
           </m.div>
 
-          <div className="min-h-0">
+          <div className="mt-10 lg:min-h-[26rem]">
             <AnimatePresence mode="wait">
               <m.div
                 key={persona.number}
@@ -295,14 +336,14 @@ export function Personas() {
                 <m.div
                   variants={fadeUpStagger}
                   initial="hidden"
-                  animate={state === "visible" ? "visible" : "leaving"}
+                  animate="visible"
                 >
                   <PersonaContent persona={persona} />
                 </m.div>
               </m.div>
             </AnimatePresence>
           </div>
-        </m.div>
+        </div>
       </div>
     </section>
   );

@@ -6,11 +6,13 @@ import { calConsultationConfig } from "@/lib/site-config";
 
 type FreeConsultationButtonProps = {
   className?: string;
+  size?: "sm" | "lg";
   onActivate?: () => void;
 };
 
 export function FreeConsultationButton({
   className = "",
+  size = "sm",
   onActivate,
 }: FreeConsultationButtonProps) {
   const onClick = useCallback(async () => {
@@ -18,11 +20,13 @@ export function FreeConsultationButton({
     await openConsultationBooking();
   }, [onActivate]);
 
+  const sizeClass = size === "lg" ? "text-base" : "text-sm";
+
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`flex w-full cursor-pointer items-center justify-center rounded-full border border-espresso-900/15 px-7 py-3.5 text-sm font-semibold text-espresso-900 transition-colors hover:border-bronze-500/60 hover:text-bronze-600 sm:inline-flex sm:w-auto sm:shrink-0 ${className}`}
+      className={`flex w-full cursor-pointer items-center justify-center font-semibold text-espresso-900/70 transition-colors hover:text-espresso-900 sm:inline-flex sm:w-auto sm:shrink-0 ${sizeClass} ${className}`}
     >
       {calConsultationConfig.buttonText}
     </button>

@@ -13,20 +13,22 @@ export function Faq() {
       <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
         <m.div
           ref={ref}
-          className="mx-auto w-full max-w-3xl text-center"
+          className="w-full"
           variants={fadeUpStagger}
           initial="hidden"
           animate={state}
         >
           <m.h2
-            className="section-heading mb-12 sm:mb-14"
+            className="mb-12 text-[clamp(1.6rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.02em] text-espresso-900 sm:mb-14"
             variants={fadeUp}
           >
-            FAQs
+            <span className="box-decoration-clone bg-green-200 px-1.5 text-espresso-900">
+              FAQs
+            </span>
           </m.h2>
 
           <m.div
-            className="border-t border-espresso-900/10 text-center"
+            className="border-t border-espresso-900/10"
             variants={fadeUpStagger}
           >
             {faqs.map((faq) => (
@@ -35,8 +37,7 @@ export function Faq() {
                 className="faq-item group border-b border-espresso-900/10"
                 variants={fadeUpItem}
               >
-                <summary className="grid cursor-pointer list-none grid-cols-[1fr_auto_1fr] items-center gap-4 py-7 sm:py-8">
-                  <span aria-hidden="true" />
+                <summary className="grid cursor-pointer list-none grid-cols-[1fr_auto] items-center gap-4 py-7 sm:py-8">
                   <span className="text-lg font-medium leading-snug tracking-[-0.01em] text-espresso-900 text-balance sm:text-xl">
                     {faq.question}
                   </span>
@@ -58,7 +59,7 @@ export function Faq() {
                 <div className="faq-panel">
                   <div className="faq-panel-inner">
                     <div className="pb-8">
-                      <p className="text-center text-base leading-relaxed text-espresso-900/60 sm:text-[1.05rem] sm:leading-[1.7]">
+                      <p className="max-w-2xl text-base leading-relaxed text-espresso-900/60 sm:text-[1.05rem] sm:leading-[1.7]">
                         {faq.answer}
                       </p>
                     </div>

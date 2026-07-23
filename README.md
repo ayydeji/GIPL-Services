@@ -35,7 +35,7 @@ src/
     page.tsx           Assembles all sections
     globals.css        Tailwind v4 theme tokens (colors, fonts, shadows)
   components/
-    Header.tsx          Sticky nav + mobile menu
+    Sidebar.tsx         Persistent sidebar nav (drawer on mobile)
     Hero.tsx             Hero section with illustrative listing-card visual
     Services.tsx         3D Tours / EPC / Photography service cards
     Pricing.tsx           Pricing cards (sourced from current public price list)

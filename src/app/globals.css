@@ -27,6 +27,24 @@
 }
 
 @layer base {
+  :root {
+    --sidebar-w: 0px;
+    --top-bar-h: 3.5rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --sidebar-w: 14rem;
+      --top-bar-h: 0px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --sidebar-w: 16rem;
+    }
+  }
+
   html {
     scroll-behavior: smooth;
     overflow-x: clip;
@@ -50,12 +68,12 @@
   }
 }
 
-.hero-headline,
-.section-heading {
-  font-size: clamp(1.6rem, 3.2vw, 3.5rem);
+.hero-headline {
+  font-size: clamp(2rem, 4.8vw, 5rem);
 }
 
 .section-heading {
+  font-size: clamp(1.6rem, 3.2vw, 3.5rem);
   font-weight: 500;
   letter-spacing: -0.02em;
   line-height: 1.02;
@@ -65,10 +83,6 @@
 
 .section-space {
   padding-block: clamp(5rem, 7vw, 7.5rem);
-}
-
-.section-space-tight {
-  padding-block: clamp(2.5rem, 4vw, 3.5rem);
 }
 
 .section-header-space {
@@ -111,6 +125,32 @@ details.faq-item[open] .faq-chevron {
   transform: rotate(180deg);
 }
 
+/* Trust strip — auto-scrolling marquee */
+.trust-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.trust-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: trust-marquee-scroll 26s linear infinite;
+}
+
+.trust-marquee:hover .trust-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes trust-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
 /* Footer wordmark — scale to fit container width */
 .footer-wordmark-wrap {
   container-type: inline-size;
@@ -147,7 +187,7 @@ details.faq-item[open] .faq-chevron {
     overflow: hidden;
   }
 
-  body.cal-modal-open header {
+  body.cal-modal-open .site-nav {
     z-index: 1 !important;
   }
 

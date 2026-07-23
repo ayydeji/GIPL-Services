@@ -77,36 +77,6 @@ export const fadeUpItem: Variants = {
   },
 };
 
-export const fadeInItem: Variants = {
-  hidden: { opacity: 0, y: 12 },
-  leaving: {
-    opacity: 0.35,
-    y: 8,
-    transition: leavingTransition,
-  },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.6, ease: EASE_ENTER },
-  },
-};
-
-export const trustSignalItem: Variants = {
-  hidden: { opacity: 0, x: -12 },
-  leaving: {
-    opacity: 0.35,
-    y: 8,
-    x: 0,
-    transition: leavingTransition,
-  },
-  visible: {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    transition: { duration: 0.6, ease: EASE_ENTER },
-  },
-};
-
 export const splitFromLeft: Variants = {
   hidden: { opacity: 0, x: -16 },
   leaving: {
@@ -166,24 +136,6 @@ export const heroHeadline: Variants = {
     opacity: 1,
     y: 0,
     transition: { duration: DURATION.hero, ease: EASE_ENTER },
-  },
-};
-
-export const heroCanvas: Variants = {
-  hidden: { opacity: 0, scale: 0.97 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: DURATION.hero, ease: EASE_ENTER, delay: 0.12 },
-  },
-};
-
-/** Opacity-only — avoids a scale "jump" in fixed-height mobile hero layouts. */
-export const heroCanvasMobile: Variants = {
-  hidden: { opacity: 0 },
-  visible: {
-    opacity: 1,
-    transition: { duration: DURATION.hero, ease: EASE_ENTER, delay: 0.12 },
   },
 };
 
@@ -260,20 +212,6 @@ export const bundleLayerRevealReduced: Variants = {
   }),
 };
 
-export const cardSwap: Variants = {
-  hidden: { opacity: 0, y: 10 },
-  visible: {
-    opacity: 1,
-    y: 0,
-    transition: { duration: 0.4, ease: EASE_ENTER },
-  },
-  exit: {
-    opacity: 0,
-    y: -6,
-    transition: { duration: 0.25, ease: EASE_EXIT },
-  },
-};
-
 export const wordmarkReveal: Variants = {
   hidden: { opacity: 0, y: 16 },
   leaving: {
@@ -342,6 +280,30 @@ export const mobileMenuItem: Variants = {
     x: -6,
     y: -2,
     transition: { duration: 0.22, ease: EASE_EXIT },
+  },
+};
+
+export const sidebarDrawer: Variants = {
+  hidden: { x: "-100%" },
+  visible: {
+    x: 0,
+    transition: { duration: 0.45, ease: EASE_ENTER },
+  },
+  exit: {
+    x: "-100%",
+    transition: { duration: 0.32, ease: EASE_EXIT },
+  },
+};
+
+export const sidebarScrim: Variants = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: { duration: 0.35, ease: EASE_ENTER },
+  },
+  exit: {
+    opacity: 0,
+    transition: { duration: 0.25, ease: EASE_EXIT },
   },
 };
 
