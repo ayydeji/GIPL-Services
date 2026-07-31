@@ -5,6 +5,7 @@ import { Sidebar } from "@/components/Sidebar";
 import { TopBar } from "@/components/TopBar";
 import { CalConsultationInit } from "@/components/CalConsultationInit";
 import { MotionProvider } from "@/components/motion/MotionProvider";
+import { Analytics } from "@vercel/analytics/next";
 
 const generalSans = localFont({
   src: [
@@ -98,6 +99,7 @@ export default function RootLayout({
           </div>
           <CalConsultationInit />
         </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );
