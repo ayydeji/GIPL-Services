@@ -116,13 +116,9 @@ export function Footer() {
           <p>
             © {year} {siteConfig.companyLegalName}. All rights reserved.
           </p>
-<<<<<<< HEAD
           <p>
             {siteConfig.brandName} · EPC · 3D Tours · Floor Plans · Property Inventory
           </p>
-=======
-          <p>{siteConfig.brandName} · EPC · 3D Tours · Floor Plans</p>
->>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
         </m.div>
       </div>
 
