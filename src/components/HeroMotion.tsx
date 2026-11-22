@@ -34,9 +34,14 @@ export function HeroMotion() {
         <div className="py-12 sm:py-16">
           <p className="max-w-xl text-base leading-relaxed text-espresso-900/60">
             Accredited Energy Performance Certificates, immersive 3D virtual
+<<<<<<< HEAD
             tours, accurate floor plans, and independent property inventories
             for landlords, estate agents &amp; property managers across{" "}
             {siteConfig.serviceArea}.
+=======
+            tours, and accurate floor plans for landlords, estate
+            agents &amp; property managers across {siteConfig.serviceArea}.
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
           </p>
         </div>
       </m.div>

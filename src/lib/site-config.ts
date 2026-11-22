@@ -139,9 +139,13 @@ export const pricing: ServicePricing[] = [
   },
 ];
 
+<<<<<<< HEAD
 export function serviceStartingPriceLabel(serviceKey: Service["key"]): string {
   if (serviceKey === "property-inventory") return "From £70";
 
+=======
+export function serviceStartingPriceLabel(serviceKey: ServiceKey): string {
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   const firstPaidTier = pricing.find((p) => p.key === serviceKey)?.tiers.find(
     (t) => t.pricePence > 0,
   );
@@ -485,12 +489,18 @@ export const trustSignals = [
 
 export type ServiceVisual = "epc-ladder" | "tour-room" | "floor-plan";
 
+<<<<<<< HEAD
 type Service = {
+=======
+export const services: {
+  key: ServiceKey;
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   id: string;
   name: string;
   shortName: string;
   tag: string;
   image: string;
+<<<<<<< HEAD
   description: string;
   benefits: (string | { label: string; description: string })[];
   ctaLabel: string;
@@ -507,6 +517,14 @@ type Service = {
 );
 
 export const services: Service[] = [
+=======
+  visual: ServiceVisual;
+  description: string;
+  benefits: string[];
+  ctaLabel: string;
+  ctaHref: string;
+}[] = [
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   {
     key: "epc",
     id: "epc",
@@ -562,6 +580,7 @@ export const services: Service[] = [
     ctaLabel: "Book a Floor Plan",
     ctaHref: SERVICE_BOOKING_FALLBACK_HREF,
   },
+<<<<<<< HEAD
   {
     key: "property-inventory",
     id: "property-inventory",
@@ -596,6 +615,8 @@ export const services: Service[] = [
     ctaLabel: "Get a quote",
     ctaHref: `https://cal.com/${calConsultationConfig.calLink}`,
   },
+=======
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
 ];
 
 const INCLUDE_TO_VISUAL: Record<string, ServiceVisual> = {
@@ -742,12 +763,16 @@ export const faqs: Faq[] = [
   {
     question: "What services do you offer?",
     answer:
+<<<<<<< HEAD
       "We provide accredited EPC certificates, professional digital floor plans, immersive 3D virtual tours, and independent property inventories. EPCs, floor plans, and tours are available individually or in an Essential, Marketing, or Complete package. Contact us for a property inventory quote.",
   },
   {
     question: "What does a property inventory include?",
     answer:
       "We offer independent property inventory reports, check-ins, mid-term inspections, and check-outs. Detailed reports supported by dated photographs help protect landlords and tenants and prevent deposit disputes. Reports are delivered promptly in digital format.",
+=======
+      "We provide accredited EPC certificates, professional digital floor plans, and immersive 3D virtual tours. You can book each service individually or choose an Essential, Marketing, or Complete package — all sized by floor area and delivered in as few visits as possible.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   },
   {
     question: "How quickly can I get an EPC?",
@@ -767,7 +792,11 @@ export const faqs: Faq[] = [
   {
     question: "How is pricing calculated?",
     answer:
+<<<<<<< HEAD
       "EPCs, floor plans, 3D virtual tours, and packages are priced by total internal floor area in three bands (up to 100 m², 101–150 m², and 151–200 m²). Properties over 200 m² can book a free consultation for a tailored quote. Packages include a saving over individual bookings. Contact us for a property inventory quote.",
+=======
+      "All services and packages are priced by total internal floor area, in the same bands: up to 100 m², 101–150 m², and 151–200 m². Properties over 200 m² can book a free consultation for a tailored quote. Package prices include a bundle saving compared with booking services separately.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   },
   {
     question: "What areas do you cover?",
@@ -777,7 +806,11 @@ export const faqs: Faq[] = [
   {
     question: "How does booking and payment work?",
     answer:
+<<<<<<< HEAD
       "To book an EPC, floor plan, 3D virtual tour, or package online, select the tier that matches your property size. Pay securely at checkout by credit card, debit card, or bank transfer. For properties over 200 m², book a free consultation for tailored pricing. For a property inventory, contact us for a quote.",
+=======
+      "Choose your service or package, select the tier that matches your property size, and book online. Pay securely at checkout — we accept major credit and debit cards and bank transfer. For properties over 200 m², book a free consultation and we'll confirm pricing for your property.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   },
   {
     question: "Who carries out the work?",

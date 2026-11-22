@@ -23,32 +23,52 @@ const generalSans = localFont({
 });
 
 const siteUrl = "https://www.gipl-services.co.uk";
+<<<<<<< HEAD
 const servicesDescription =
   "Accredited EPC certificates, 3D virtual tours, floor plans, and independent property inventories for landlords, estate agents, and property professionals.";
+=======
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: {
+<<<<<<< HEAD
     default: "GIPL Services | EPCs, 3D Tours, Floor Plans & Property Inventory",
     template: "%s | GIPL Services",
   },
   description:
     "GIPL Services provides accredited EPC certificates, 3D virtual tours, floor plans, and independent property inventories across London and the South East.",
+=======
+    default: "GIPL Services | EPC Certificates, 3D Virtual Tours & Floor Plans",
+    template: "%s | GIPL Services",
+  },
+  description:
+    "Groove Park Investment Limited (GIPL Services) provides accredited EPC certificates, 3D virtual tours, and floor plans for landlords, estate agents, and property professionals across London and the South East.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   keywords: [
     "EPC certificate",
     "Energy Performance Certificate",
     "3D virtual tours",
     "floor plans",
     "property floor plans",
+<<<<<<< HEAD
     "property inventory",
+=======
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
     "London property marketing",
     "EPC London",
     "EPC Kent",
   ],
   authors: [{ name: "Groove Park Investment Limited" }],
   openGraph: {
+<<<<<<< HEAD
     title: "GIPL Services | EPCs, Property Marketing & Inventories",
     description: servicesDescription,
+=======
+    title: "GIPL Services | EPC Certificates & Property Marketing",
+    description:
+      "Accredited EPC Certificates, 3D Virtual Tours, and Floor Plans for landlords, estate agents, and property professionals.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
     url: siteUrl,
     siteName: "GIPL Services",
     locale: "en_GB",
@@ -56,8 +76,14 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
+<<<<<<< HEAD
     title: "GIPL Services | EPCs, Property Marketing & Inventories",
     description: servicesDescription,
+=======
+    title: "GIPL Services | EPC Certificates & Property Marketing",
+    description:
+      "Accredited EPC Certificates, 3D Virtual Tours, and Floor Plans for landlords, estate agents, and property professionals.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   },
   robots: {
     index: true,
@@ -69,7 +95,12 @@ const jsonLd = {
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
   name: "GIPL Services (Groove Park Investment Limited)",
+<<<<<<< HEAD
   description: servicesDescription,
+=======
+  description:
+    "Accredited EPC certificates, 3D virtual tours, and floor plans for landlords, estate agents, and property professionals.",
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   areaServed: ["London", "Kent", "South East England"],
   telephone: "+44-7495-331757",
   email: "muhammad@gipl.uk",

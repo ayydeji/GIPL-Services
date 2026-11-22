@@ -6,8 +6,13 @@ import { useEffect, useState } from "react";
 import {
   services,
   serviceStartingPriceLabel,
+<<<<<<< HEAD
 } from "@/lib/site-config";
 import { openConsultationBooking } from "@/lib/cal-consultation";
+=======
+  type ServiceKey,
+} from "@/lib/site-config";
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
 import { fadeUp, mobileMenuPanel } from "@/lib/motion";
 import { useScrollReveal } from "@/lib/use-scroll-reveal";
 import ServiceVisualClient from "@/components/ServiceVisualClient";
@@ -19,12 +24,21 @@ type Service = (typeof services)[number];
 // Shared sub-components
 // ---------------------------------------------------------------------------
 
+<<<<<<< HEAD
 function Benefits({ items }: { items: Service["benefits"] }) {
   return (
     <ul className="mt-4 space-y-2">
       {items.map((item) => (
         <li
           key={typeof item === "string" ? item : item.label}
+=======
+function Benefits({ items }: { items: string[] }) {
+  return (
+    <ul className="mt-4 space-y-2">
+      {items.map((b) => (
+        <li
+          key={b}
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
           className="flex items-start gap-3 text-sm leading-relaxed text-espresso-900/65"
         >
           <svg
@@ -41,6 +55,7 @@ function Benefits({ items }: { items: Service["benefits"] }) {
               strokeLinejoin="round"
             />
           </svg>
+<<<<<<< HEAD
           {typeof item === "string" ? (
             item
           ) : (
@@ -49,13 +64,20 @@ function Benefits({ items }: { items: Service["benefits"] }) {
               {item.description}
             </span>
           )}
+=======
+          {b}
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
         </li>
       ))}
     </ul>
   );
 }
 
+<<<<<<< HEAD
 function PricePill({ serviceKey }: { serviceKey: Service["key"] }) {
+=======
+function PricePill({ serviceKey }: { serviceKey: ServiceKey }) {
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   return (
     <span className="shrink-0 rounded-full bg-bronze-500 px-3 py-1 text-xs font-semibold text-paper">
       {serviceStartingPriceLabel(serviceKey)}
@@ -64,6 +86,7 @@ function PricePill({ serviceKey }: { serviceKey: Service["key"] }) {
 }
 
 function ServiceModel({ service }: { service: Service }) {
+<<<<<<< HEAD
   if (service.key === "property-inventory") {
     return (
       <Image
@@ -76,6 +99,8 @@ function ServiceModel({ service }: { service: Service }) {
     );
   }
 
+=======
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
   if (service.key === "epc") {
     return (
       <Image
@@ -143,6 +168,7 @@ function OpenServiceBody({
       <p className="max-w-xl text-sm leading-relaxed text-espresso-900/65">
         {service.description}
       </p>
+<<<<<<< HEAD
       {service.key === "property-inventory" && (
         <>
           <p className="mt-3 max-w-xl text-sm leading-relaxed text-espresso-900/65">
@@ -179,6 +205,16 @@ function OpenServiceBody({
           className={overlayOptions ? "mt-5" : "mt-5 w-fit"}
         />
       )}
+=======
+      <Benefits items={service.benefits} />
+      <BookServiceButton
+        serviceKey={service.key}
+        compact
+        expandInline={!overlayOptions}
+        menuAlign="left"
+        className={overlayOptions ? "mt-5" : "mt-5 w-fit"}
+      />
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
     </>
   );
 }
@@ -222,8 +258,13 @@ function SectionHeader() {
         we offer
       </h2>
       <p className="mt-5 max-w-xl text-base leading-relaxed text-espresso-900/60">
+<<<<<<< HEAD
         Book EPC certificates, floor plans, and 3D virtual tours in one visit,
         or request a quote for an independent property inventory.
+=======
+        EPC certificates, floor plans, and 3D virtual tours — each priced by
+        property size, ready to book in one visit.
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
       </p>
     </m.div>
   );
@@ -240,18 +281,27 @@ function DesktopAccordion({
   activeIndex: number;
   onOpen: (index: number) => void;
 }) {
+<<<<<<< HEAD
   const inventoryOpen = services[activeIndex].key === "property-inventory";
 
   return (
     <div
       className={`flex gap-3 ${inventoryOpen ? "min-h-[clamp(30rem,72vh,44rem)]" : "h-[clamp(30rem,72vh,44rem)]"}`}
     >
+=======
+  return (
+    <div className="flex h-[clamp(30rem,72vh,44rem)] gap-3">
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
       {services.map((s, i) => {
         const isOpen = i === activeIndex;
         return (
           <div
             key={s.id}
+<<<<<<< HEAD
             className="relative flex flex-col overflow-hidden border border-espresso-900/10 bg-surface"
+=======
+            className="relative overflow-hidden border border-espresso-900/10 bg-surface"
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
             style={{
               flexGrow: isOpen ? 1 : 0,
               flexBasis: "5rem",
@@ -259,7 +309,11 @@ function DesktopAccordion({
             }}
           >
             {isOpen ? (
+<<<<<<< HEAD
               <div className="flex min-w-[28rem] flex-1 flex-col p-6 xl:p-7">
+=======
+              <div className="flex h-full min-w-[28rem] flex-col p-6 xl:p-7">
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-[0.14em] text-espresso-900/40">
@@ -274,9 +328,13 @@ function DesktopAccordion({
 
                 <OpenServiceBody service={s} overlayOptions />
 
+<<<<<<< HEAD
                 <div
                   className={`relative mt-5 flex-1 overflow-hidden border border-espresso-900/8 bg-paper ${inventoryOpen ? "min-h-56" : "min-h-0"}`}
                 >
+=======
+                <div className="relative mt-5 min-h-0 flex-1 overflow-hidden border border-espresso-900/8 bg-paper">
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
                   <ServiceModel service={s} />
                 </div>
               </div>
@@ -285,7 +343,11 @@ function DesktopAccordion({
                 type="button"
                 onClick={() => onOpen(i)}
                 aria-label={`Show ${s.name}`}
+<<<<<<< HEAD
                 className="group flex w-full flex-1 flex-col items-center justify-between py-6 transition-colors hover:bg-sand-200"
+=======
+                className="group flex h-full w-full flex-col items-center justify-between py-6 transition-colors hover:bg-sand-200"
+>>>>>>> c3f0168a8f450a9ae1cfd1a1bd3994cc161f9461
               >
                 <span className="text-xs font-semibold tracking-[0.1em] text-espresso-900/30">
                   {String(i + 1).padStart(2, "0")}
