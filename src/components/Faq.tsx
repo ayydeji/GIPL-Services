@@ -1,0 +1,75 @@
+"use client";
+
+import { m } from "framer-motion";
+import { faqs } from "@/lib/site-config";
+import { fadeUp, fadeUpItem, fadeUpStagger } from "@/lib/motion";
+import { useScrollReveal } from "@/lib/use-scroll-reveal";
+
+export function Faq() {
+  const { ref, state } = useScrollReveal<HTMLDivElement>();
+
+  return (
+    <section id="faq" className="section-space bg-paper">
+      <div className="mx-auto max-w-[1400px] px-5 sm:px-8">
+        <m.div
+          ref={ref}
+          className="w-full"
+          variants={fadeUpStagger}
+          initial="hidden"
+          animate={state}
+        >
+          <m.h2
+            className="mb-12 text-[clamp(1.6rem,3.2vw,2.75rem)] font-bold leading-[1.1] tracking-[-0.02em] text-espresso-900 sm:mb-14"
+            variants={fadeUp}
+          >
+            <span className="box-decoration-clone bg-green-200 px-1.5 text-espresso-900">
+              FAQs
+            </span>
+          </m.h2>
+
+          <m.div
+            className="border-t border-espresso-900/10"
+            variants={fadeUpStagger}
+          >
+            {faqs.map((faq) => (
+              <m.details
+                key={faq.question}
+                className="faq-item group border-b border-espresso-900/10"
+                variants={fadeUpItem}
+              >
+                <summary className="grid cursor-pointer list-none grid-cols-[1fr_auto] items-center gap-4 py-7 sm:py-8">
+                  <span className="text-lg font-medium leading-snug tracking-[-0.01em] text-espresso-900 text-balance sm:text-xl">
+                    {faq.question}
+                  </span>
+                  <span
+                    className="faq-chevron justify-self-end text-espresso-900/35 group-hover:text-espresso-900/55"
+                    aria-hidden="true"
+                  >
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                      <path
+                        d="M6 9L12 15L18 9"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </span>
+                </summary>
+                <div className="faq-panel">
+                  <div className="faq-panel-inner">
+                    <div className="pb-8">
+                      <p className="max-w-2xl text-base leading-relaxed text-espresso-900/60 sm:text-[1.05rem] sm:leading-[1.7]">
+                        {faq.answer}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </m.details>
+            ))}
+          </m.div>
+        </m.div>
+      </div>
+    </section>
+  );
+}

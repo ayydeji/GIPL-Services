@@ -1,0 +1,208 @@
+@import "tailwindcss";
+
+@theme {
+  /* Brand palette */
+  --color-sand-50: #FAF8F5;
+  --color-sand-100: #F5F1EB;
+  --color-sand-200: #ECE3D6;
+  --color-tan-300: #DCC4A3;
+  --color-tan-400: #C8A27A;
+  --color-bronze-500: #B38B5D;
+  --color-bronze-600: #9A7349;
+  --color-espresso-700: #5A4938;
+  --color-espresso-800: #45382B;
+  --color-espresso-900: #3D3126;
+
+  /* Functional aliases */
+  --color-ink: #3D3126;
+  --color-paper: #FAF8F5;
+  --color-surface: #F5F1EB;
+  --color-accent: #B38B5D;
+
+  /* Single typeface across the whole site — General Sans only. */
+  --font-display: "General Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "General Sans", ui-sans-serif, system-ui, sans-serif;
+
+  --shadow-card: 0 1px 2px rgba(61, 49, 38, 0.04), 0 8px 24px -8px rgba(61, 49, 38, 0.12);
+}
+
+@layer base {
+  :root {
+    --sidebar-w: 0px;
+    --top-bar-h: 3.5rem;
+  }
+
+  @media (min-width: 640px) {
+    :root {
+      --sidebar-w: 14rem;
+      --top-bar-h: 0px;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    :root {
+      --sidebar-w: 16rem;
+    }
+  }
+
+  html {
+    scroll-behavior: smooth;
+    overflow-x: clip;
+  }
+
+  body {
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background: var(--color-tan-300);
+    color: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-bronze-500);
+    outline-offset: 2px;
+  }
+}
+
+.hero-headline {
+  font-size: clamp(2rem, 4.8vw, 5rem);
+}
+
+.section-heading {
+  font-size: clamp(1.6rem, 3.2vw, 3.5rem);
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+  color: var(--color-ink);
+  text-wrap: balance;
+}
+
+.section-space {
+  padding-block: clamp(5rem, 7vw, 7.5rem);
+}
+
+.section-header-space {
+  margin-bottom: clamp(3rem, 5vw, 4rem);
+}
+
+/* FAQ accordion */
+details.faq-item summary::-webkit-details-marker { display: none; }
+
+details.faq-item .faq-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details.faq-item[open] .faq-panel {
+  grid-template-rows: 1fr;
+}
+
+details.faq-item .faq-panel-inner {
+  overflow: hidden;
+  min-height: 0;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details.faq-item[open] .faq-panel-inner {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+details.faq-item .faq-chevron {
+  transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+details.faq-item[open] .faq-chevron {
+  transform: rotate(180deg);
+}
+
+/* Trust strip — auto-scrolling marquee */
+.trust-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+  mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+}
+
+.trust-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: trust-marquee-scroll 26s linear infinite;
+}
+
+.trust-marquee:hover .trust-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes trust-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Footer wordmark — scale to fit container width */
+.footer-wordmark-wrap {
+  container-type: inline-size;
+}
+
+.footer-wordmark {
+  width: 100%;
+  font-size: clamp(2.5rem, 15.5cqi, 28rem);
+  line-height: 0.82;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  cal-modal-box {
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100dvh !important;
+    max-height: 100dvh !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    z-index: 2147483647 !important;
+  }
+
+  cal-modal-box iframe.cal-embed {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 100% !important;
+    max-height: 100% !important;
+    border-radius: 0 !important;
+  }
+
+  body.cal-modal-open {
+    overflow: hidden;
+  }
+
+  body.cal-modal-open .site-nav {
+    z-index: 1 !important;
+  }
+
+  body.mobile-menu-open .hero-epc-panel {
+    visibility: hidden;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *:not(cal-modal-box):not(cal-inline),
+  *:not(cal-modal-box):not(cal-inline)::before,
+  *:not(cal-modal-box):not(cal-inline)::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
